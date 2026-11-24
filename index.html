@@ -91,7 +91,7 @@ document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'
 button.classList.add('active');
 }
 function addDocument(){
-const file=document.getElementById('file').files[0];
+const file = document.querySelector('#file').files.item(0);
 const type=document.getElementById('type').value;
 const message=document.getElementById('message');
 if(!file){message.textContent='Vælg venligst en PDF-fil først.';return;}
