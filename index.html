@@ -2,89 +2,112 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SCRAPLOG</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f1f3f5;
-      color: #222;
-    }
-    header {
-      background: #183b32;
-      color: white;
-      padding: 25px;
-      text-align: center;
-    }
-    main {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 20px;
-    }
-    .panel {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px #0001;
-    }
-    input, button {
-      padding: 12px;
-      margin: 6px 0;
-      font-size: 16px;
-      border-radius: 6px;
-    }
-    input {
-      border: 1px solid #ccc;
-      width: 95%;
-    }
-    button {
-      background: #183b32;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCRAPLOG</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5f4;color:#202b27;font-family:Arial,sans-serif}
+header{background:#173d32;color:white;padding:22px 6%;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:26px;font-weight:bold;letter-spacing:2px}
+header span{font-size:12px;color:#c5d8ce}
+main{max-width:1100px;margin:30px auto;padding:0 20px}
+h2{margin-top:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px;margin:20px 0}
+.card{background:white;padding:22px;border-radius:12px;box-shadow:0 2px 8px #0000000b}
+.stat{font-size:27px;font-weight:bold;margin-top:12px}
+.muted{color:#78847e;font-size:13px}
+button{background:#1c5946;color:white;border:0;border-radius:7px;padding:12px 17px;cursor:pointer;font-size:14px}
+button:hover{background:#26765c}
+.secondary{background:#e7eee9;color:#234d3e}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0}
+.tabs button{background:#e4eae6;color:#244437}
+.tabs button.active{background:#1c5946;color:white}
+.upload{border:2px dashed #aabbb0;border-radius:12px;padding:35px;text-align:center;background:#f9fbf9;margin:18px 0}
+input,select{padding:11px;border:1px solid #d4ddd7;border-radius:7px;width:100%;margin:7px 0 14px;background:white}
+label{font-size:13px;font-weight:bold}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:13px 9px;border-bottom:1px solid #edf0ed}
+th{color:#748078}
+.tag{background:#e5f1e9;color:#286044;padding:5px 9px;border-radius:20px;font-size:11px}
+.hidden{display:none}
+.notice{padding:12px;background:#fff7e4;border-radius:8px;color:#775a1c;font-size:13px;margin-top:15px}
+@media(max-width:600px){header{padding:18px;display:block}.stats{grid-template-columns:1fr 1fr}table{font-size:11px}}
+</style>
 </head>
 <body>
-  <header>
-    <h1>SCRAPLOG</h1>
-    <p>Dit system til skrot og materialestyring</p>
-  </header>
-
-  <main>
-    <div class="panel">
-      <h2>Velkommen til SCRAPLOG</h2>
-      <p>Her starter din digitale skrotregistrering.</p>
-
-      <h3>Opret ny registrering</h3>
-      <input id="materiale" placeholder="Materiale">
-      <input id="vaegt" type="number" placeholder="Vægt i kg">
-      <button onclick="registrer()">Gem registrering</button>
-
-      <h3>Registreringer</h3>
-      <ul id="liste"></ul>
-    </div>
-  </main>
-
-  <script>
-    function registrer() {
-      const materiale = document.getElementById("materiale").value;
-      const vaegt = document.getElementById("vaegt").value;
-
-      if (!materiale || !vaegt || Number(vaegt) <= 0) {
-        alert("Indtast materiale og en gyldig vægt.");
-        return;
-      }
-
-      const punkt = document.createElement("li");
-      punkt.textContent = materiale + " – " + vaegt + " kg";
-      document.getElementById("liste").appendChild(punkt);
-
-      document.getElementById("materiale").value = "";
-      document.getElementById("vaegt").value = "";
-    }
-  </script>
+<header>
+<div>
+<div class="logo">SCRAPLOG</div>
+<span>SKROT- OG MATERIALSTYRING</span>
+</div>
+<div>Bilagssystem</div>
+</header>
+<main>
+<h2>Dashboard</h2>
+<p class="muted">Overblik over fakturaer, kreditnotaer og materialer.</p>
+<div class="stats">
+<div class="card"><div class="muted">Samlede bilag</div><div class="stat" id="count">0</div></div>
+<div class="card"><div class="muted">Fakturaer</div><div class="stat" id="invoices">0</div></div>
+<div class="card"><div class="muted">Kreditnotaer</div><div class="stat" id="credits">0</div></div>
+<div class="card"><div class="muted">Samlet vægt</div><div class="stat" id="weight">0 kg</div></div>
+</div>
+<div class="tabs">
+<button class="active" onclick="show('upload',this)">Tilføj bilag</button>
+<button onclick="show('documents',this)">Bilagsoversigt</button>
+</div>
+<section id="upload" class="card">
+<h2>Tilføj nyt bilag</h2>
+<p class="muted">Upload en faktura eller kreditnota som PDF.</p>
+<label>Bilagstype</label>
+<select id="type"><option>Faktura</option><option>Kreditnota</option></select>
+<label>Vælg PDF-fil</label>
+<div class="upload">
+<div style="font-size:35px">📄</div>
+<p>Vælg et bilag fra din computer</p>
+<input type="file" id="file" accept=".pdf,application/pdf">
+</div>
+<div class="notice">Dette er første version af bilagsmodulet. Automatisk AI-aflæsning og sikker lagring kobles på i næste udviklingstrin.</div>
+<br>
+<button onclick="addDocument()">Tilføj bilag</button>
+<p id="message" class="muted"></p>
+</section>
+<section id="documents" class="card hidden">
+<h2>Bilagsoversigt</h2>
+<div style="overflow-x:auto">
+<table>
+<thead><tr><th>Filnavn</th><th>Type</th><th>Dato tilføjet</th><th>Status</th></tr></thead>
+<tbody id="rows"><tr><td colspan="4" class="muted">Ingen bilag tilføjet endnu.</td></tr></tbody>
+</table>
+</div>
+</section>
+</main>
+<script>
+let docs=[];
+function show(id,button){
+document.getElementById('upload').classList.toggle('hidden',id!=='upload');
+document.getElementById('documents').classList.toggle('hidden',id!=='documents');
+document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+button.classList.add('active');
+}
+function addDocument(){
+const file=document.getElementById('file').files[0];
+const type=document.getElementById('type').value;
+const message=document.getElementById('message');
+if(!file){message.textContent='Vælg venligst en PDF-fil først.';return;}
+if(file.type!=='application/pdf'){message.textContent='Filen skal være en PDF.';return;}
+docs.push({name:file.name,type:type,date:new Date().toLocaleDateString('da-DK')});
+document.getElementById('file').value='';
+message.textContent='Bilaget er tilføjet til denne visning. Det er endnu ikke uploadet til en permanent database.';
+render();
+}
+function render(){
+document.getElementById('count').textContent=docs.length;
+document.getElementById('invoices').textContent=docs.filter(d=>d.type==='Faktura').length;
+document.getElementById('credits').textContent=docs.filter(d=>d.type==='Kreditnota').length;
+document.getElementById('rows').innerHTML=docs.length?docs.map(d=>`<tr><td>${escapeHTML(d.name)}</td><td>${d.type}</td><td>${d.date}</td><td><span class="tag">Afventer aflæsning</span></td></tr>`).join(''):'<tr><td colspan="4">Ingen bilag tilføjet endnu.</td></tr>';
+}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+</script>
 </body>
 </html>
