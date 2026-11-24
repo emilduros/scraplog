@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCRAPLOG</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f3f5;
+      color: #222;
+    }
+    header {
+      background: #183b32;
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+    main {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+    .panel {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px #0001;
+    }
+    input, button {
+      padding: 12px;
+      margin: 6px 0;
+      font-size: 16px;
+      border-radius: 6px;
+    }
+    input {
+      border: 1px solid #ccc;
+      width: 95%;
+    }
+    button {
+      background: #183b32;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SCRAPLOG</h1>
+    <p>Dit system til skrot og materialestyring</p>
+  </header>
+
+  <main>
+    <div class="panel">
+      <h2>Velkommen til SCRAPLOG</h2>
+      <p>Her starter din digitale skrotregistrering.</p>
+
+      <h3>Opret ny registrering</h3>
+      <input id="materiale" placeholder="Materiale">
+      <input id="vaegt" type="number" placeholder="Vægt i kg">
+      <button onclick="registrer()">Gem registrering</button>
+
+      <h3>Registreringer</h3>
+      <ul id="liste"></ul>
+    </div>
+  </main>
+
+  <script>
+    function registrer() {
+      const materiale = document.getElementById("materiale").value;
+      const vaegt = document.getElementById("vaegt").value;
+
+      if (!materiale || !vaegt || Number(vaegt) <= 0) {
+        alert("Indtast materiale og en gyldig vægt.");
+        return;
+      }
+
+      const punkt = document.createElement("li");
+      punkt.textContent = materiale + " – " + vaegt + " kg";
+      document.getElementById("liste").appendChild(punkt);
+
+      document.getElementById("materiale").value = "";
+      document.getElementById("vaegt").value = "";
+    }
+  </script>
+</body>
+</html>
