@@ -360,11 +360,11 @@ th {
 
     <input id="authPassword" type="password" placeholder="Adgangskode">
 
-    <button class="primary" style="width:100%" onclick="login()">
+    <button type="button" class="primary" style="width:100%" onclick="login()">
       Log ind
     </button>
 
-    <button class="secondary" style="width:100%;margin-top:10px" onclick="signup()">
+    <button type="button" class="secondary" style="width:100%;margin-top:10px" onclick="signup()">
       Opret konto
     </button>
 
@@ -671,10 +671,14 @@ th {
 const SUPABASE_URL = "https://romdztjopcogwcmagiij.supabase.co";
 const SUPABASE_KEY = "sb_publishable_mj_keuzf5c6wVKmDyZ_1vQ_q8wSmnz5";
 
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+let db = null;
+
+if (window.supabase && window.supabase.createClient) {
+  db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+}
 
 /* DATA */
 
@@ -694,7 +698,12 @@ function authMessage(text,color="#64748b") {
 
 async function login() {
 
-  const email=document.getElementById("authEmail").value;
+  if (!db) {
+    authMessage("Supabase kunne ikke indlæses. Genindlæs siden.","#dc4444");
+    return;
+  }
+
+  const email=document.getElementById("authEmail").value.trim();
   const password=document.getElementById("authPassword").value;
 
   if(!email || !password) {
@@ -720,7 +729,12 @@ async function login() {
 
 async function signup() {
 
-  const email=document.getElementById("authEmail").value;
+  if (!db) {
+    authMessage("Supabase kunne ikke indlæses. Genindlæs siden.","#dc4444");
+    return;
+  }
+
+  const email=document.getElementById("authEmail").value.trim();
   const password=document.getElementById("authPassword").value;
 
   if(!email || !password) {
@@ -745,12 +759,41 @@ async function signup() {
     return;
   }
 
-  authMessage("Konto oprettet. Tjek din e-mail for bekræftelse.","#168653");
+  if (data.user && data.session) {
+    const companyName = prompt("Indtast dit firmanavn:");
+    if (!companyName || !companyName.trim()) {
+      authMessage("Konto oprettet. Du kan oprette virksomhed efter login.","#168653");
+      return;
+    }
+
+    const cvr = prompt("Indtast CVR-nummer (valgfrit):") || "";
+
+    const {data:companyId,error:companyError}=await db.rpc("opret_virksomhed",{
+      firmanavn:companyName.trim(),
+      cvr_nummer:cvr.trim()
+    });
+
+    if(companyError) {
+      authMessage("Konto oprettet, men virksomhed kunne ikke oprettes: "+companyError.message,"#dc4444");
+      return;
+    }
+
+    authMessage("Konto og virksomhed oprettet!","#168653");
+    document.getElementById("loginScreen").classList.add("hidden");
+    renderAll();
+  } else {
+    authMessage("Konto oprettet. Tjek din e-mail for bekræftelse, og log derefter ind.","#168653");
+  }
 }
 
 async function resetPassword() {
 
-  const email=document.getElementById("authEmail").value;
+  if (!db) {
+    authMessage("Supabase kunne ikke indlæses. Genindlæs siden.","#dc4444");
+    return;
+  }
+
+  const email=document.getElementById("authEmail").value.trim();
 
   if(!email) {
     authMessage("Indtast din e-mail først","#dc4444");
@@ -769,7 +812,7 @@ async function resetPassword() {
 }
 
 async function logout() {
-  await db.auth.signOut();
+  if (db) await db.auth.signOut();
   document.getElementById("loginScreen").classList.remove("hidden");
 }
 
@@ -1321,20 +1364,17 @@ async function checkLogin() {
 
 /* AUTH STATE */
 
-db.auth.onAuthStateChange((event,session)=>{
-
-  if(session) {
-    document.getElementById("loginScreen").classList.add("hidden");
-  } else {
-    document.getElementById("loginScreen").classList.remove("hidden");
-  }
-
-});
+if(db && db.auth) {
+  db.auth.onAuthStateChange((event,session)=>{
+    if(session) document.getElementById("loginScreen").classList.add("hidden");
+    else document.getElementById("loginScreen").classList.remove("hidden");
+  });
+}
 
 /* START */
-
 renderAll();
-checkLogin();
+if(db && db.auth) checkLogin();
+else authMessage("Loginbiblioteket kunne ikke indlæses. Kontrollér internetforbindelsen og genindlæs siden.","#dc4444");
 
 </script>
 
