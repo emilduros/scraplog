@@ -5,7 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCRAPLOG</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
+:root {
+  --dark: #17232e;
+  --dark2: #233342;
+  --orange: #f5a623;
+  --bg: #f3f5f7;
+  --white: #ffffff;
+  --text: #263442;
+  --muted: #788391;
+  --green: #168653;
+  --red: #dc4444;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -14,30 +28,101 @@
 
 body {
   font-family: Arial, sans-serif;
-  background: #f3f5f7;
-  color: #1f2937;
+  background: var(--bg);
+  color: var(--text);
 }
 
-header {
-  background: #17232e;
-  color: white;
-  padding: 22px;
+button, input, select, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* LOGIN */
+
+#loginScreen {
+  position: fixed;
+  inset: 0;
+  background: var(--dark);
+  z-index: 99999;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  padding: 20px;
+}
+
+.loginBox {
+  background: white;
+  width: 100%;
+  max-width: 430px;
+  padding: 35px;
+  border-radius: 18px;
 }
 
 .logo {
-  font-size: 27px;
-  font-weight: bold;
+  font-size: 32px;
+  font-weight: 800;
   letter-spacing: 2px;
 }
 
 .logo span {
-  color: #f5a623;
+  color: var(--orange);
 }
 
-header p {
+.loginBox .logo {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.loginSubtitle {
+  text-align: center;
+  color: var(--muted);
+  margin-bottom: 25px;
+}
+
+.loginBox input {
+  width: 100%;
+  padding: 13px;
+  margin-bottom: 12px;
+  border: 1px solid #dce2e7;
+  border-radius: 8px;
+}
+
+.loginMessage {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* LAYOUT */
+
+header {
+  height: 75px;
+  background: var(--dark);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+}
+
+header .logo {
+  color: white;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.headerRight span {
   color: #cbd5e1;
   font-size: 13px;
 }
@@ -48,48 +133,48 @@ header p {
 }
 
 .sidebar {
-  width: 220px;
-  background: #202e3a;
-  padding: 20px;
+  width: 230px;
+  background: var(--dark2);
+  padding: 18px 12px;
+  flex-shrink: 0;
 }
 
 .sidebar button {
   width: 100%;
-  padding: 13px;
-  margin-bottom: 7px;
   border: none;
-  border-radius: 7px;
   background: transparent;
   color: white;
   text-align: left;
-  cursor: pointer;
-  font-size: 15px;
+  padding: 14px;
+  margin-bottom: 5px;
+  border-radius: 8px;
 }
 
 .sidebar button:hover,
 .sidebar button.active {
-  background: #34495a;
+  background: #3a4b5c;
 }
 
 .main {
   flex: 1;
-  padding: 25px;
+  padding: 28px;
   min-width: 0;
 }
 
 h1 {
   margin-bottom: 8px;
+  font-size: 27px;
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--muted);
   margin-bottom: 25px;
 }
 
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 15px;
+  gap: 16px;
   margin-bottom: 25px;
 }
 
@@ -97,107 +182,124 @@ h1 {
   background: white;
   padding: 22px;
   border-radius: 12px;
-  box-shadow: 0 2px 7px #00000008;
+  box-shadow: 0 2px 8px #00000006;
 }
 
 .card h3 {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--muted);
   margin-bottom: 12px;
 }
 
-.card .value {
-  font-size: 27px;
+.value {
+  font-size: 26px;
   font-weight: bold;
 }
 
 .green {
-  color: #168653;
+  color: var(--green);
 }
 
 .orange {
-  color: #e99b15;
+  color: var(--orange);
 }
 
 .panel {
   background: white;
-  padding: 22px;
   border-radius: 12px;
+  padding: 22px;
   margin-bottom: 20px;
 }
 
 .panel h2 {
+  font-size: 19px;
   margin-bottom: 18px;
 }
 
-button.primary {
-  background: #f5a623;
-  color: #17232e;
+.primary {
+  background: var(--orange);
+  color: var(--dark);
   border: none;
-  padding: 11px 17px;
-  border-radius: 7px;
-  cursor: pointer;
+  border-radius: 8px;
+  padding: 12px 18px;
   font-weight: bold;
-  margin-bottom: 15px;
 }
 
-button.primary:hover {
-  background: #e99b15;
+.primary:hover {
+  filter: brightness(.95);
 }
 
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 11px;
-  margin-bottom: 12px;
-  border: 1px solid #d8dee5;
-  border-radius: 7px;
-  font-size: 14px;
+.secondary {
+  background: #e8edf1;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 15px;
 }
 
-.form-grid {
+.danger {
+  background: #fee2e2;
+  color: #991b1b;
+  border: none;
+  padding: 8px 11px;
+  border-radius: 6px;
+}
+
+.formGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 10px;
+  gap: 12px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dce2e7;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background: white;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 th, td {
-  padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 12px;
+  border-bottom: 1px solid #e8edf1;
 }
 
 th {
-  background: #f8fafc;
+  background: #f8fafb;
   font-size: 13px;
 }
 
 .empty {
-  color: #9ca3af;
   padding: 20px 0;
+  color: var(--muted);
 }
 
-.delete {
-  background: #fee2e2;
-  color: #991b1b;
-  border: none;
-  padding: 7px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.hidden {
+.section {
   display: none;
 }
 
-@media(max-width:750px) {
+.section.active {
+  display: block;
+}
+
+.small {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media(max-width: 800px) {
   .container {
     flex-direction: column;
   }
@@ -206,17 +308,36 @@ th {
     width: 100%;
     display: flex;
     overflow-x: auto;
-    padding: 10px;
   }
 
   .sidebar button {
     min-width: 120px;
-    margin: 3px;
     text-align: center;
+    white-space: nowrap;
   }
 
   .main {
     padding: 15px;
+  }
+
+  header {
+    padding: 0 15px;
+  }
+
+  header .logo {
+    font-size: 24px;
+  }
+
+  .headerRight span {
+    display: none;
+  }
+
+  table {
+    min-width: 650px;
+  }
+
+  .panel {
+    overflow-x: auto;
   }
 }
 </style>
@@ -224,77 +345,128 @@ th {
 
 <body>
 
+<!-- LOGIN -->
+
+<div id="loginScreen">
+  <div class="loginBox">
+
+    <div class="logo">SCRAP<span>LOG</span></div>
+
+    <p class="loginSubtitle">
+      Projektstyring & Materialeøkonomi
+    </p>
+
+    <input id="authEmail" type="email" placeholder="E-mail">
+
+    <input id="authPassword" type="password" placeholder="Adgangskode">
+
+    <button class="primary" style="width:100%" onclick="login()">
+      Log ind
+    </button>
+
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="signup()">
+      Opret konto
+    </button>
+
+    <button style="width:100%;margin-top:12px;border:none;background:white;color:#64748b" onclick="resetPassword()">
+      Glemt adgangskode?
+    </button>
+
+    <div id="authMessage" class="loginMessage"></div>
+
+  </div>
+</div>
+
+<!-- HEADER -->
+
 <header>
+
   <div class="logo">SCRAP<span>LOG</span></div>
-  <p>Projektstyring & Materialeøkonomi</p>
+
+  <div class="headerRight">
+    <span>Projektstyring & Materialeøkonomi</span>
+    <button class="primary" onclick="logout()">Log ud</button>
+  </div>
+
 </header>
 
 <div class="container">
 
 <nav class="sidebar">
-  <button class="active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
-  <button onclick="showPage('projekter',this)">🏗️ Projekter</button>
-  <button onclick="showPage('skrot',this)">♻️ Skrot</button>
-  <button onclick="showPage('affald',this)">🚛 Affald</button>
-  <button onclick="showPage('udgifter',this)">💰 Udgifter</button>
-  <button onclick="showPage('rapporter',this)">📈 Rapporter</button>
+
+  <button class="active" onclick="navigate('dashboard',this)">📊 Dashboard</button>
+  <button onclick="navigate('projects',this)">🏗️ Projekter</button>
+  <button onclick="navigate('scrap',this)">♻️ Skrot</button>
+  <button onclick="navigate('waste',this)">🚛 Affald</button>
+  <button onclick="navigate('expenses',this)">💰 Udgifter</button>
+  <button onclick="navigate('reports',this)">📈 Rapporter</button>
+  <button onclick="navigate('settings',this)">⚙️ Indstillinger</button>
+
 </nav>
 
 <main class="main">
 
-<section id="dashboard">
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="section active">
 
 <h1>Dashboard</h1>
-<p class="subtitle">Overblik over din virksomhed</p>
+<p class="subtitle">Virksomhedens samlede overblik</p>
 
 <div class="cards">
+
   <div class="card">
-    <h3>Aktive projekter</h3>
-    <div class="value" id="dashProjects">0</div>
+    <h3>Projekter</h3>
+    <div class="value" id="totalProjects">0</div>
   </div>
 
   <div class="card">
     <h3>Skrotindtægt</h3>
-    <div class="value green" id="dashScrap">0 kr.</div>
+    <div class="value green" id="totalScrap">0 kr.</div>
   </div>
 
   <div class="card">
-    <h3>Samlet skrot</h3>
-    <div class="value" id="dashKg">0 kg</div>
+    <h3>Skrotmængde</h3>
+    <div class="value" id="totalKg">0 kg</div>
   </div>
 
   <div class="card">
-    <h3>Udgifter</h3>
-    <div class="value orange" id="dashExpenses">0 kr.</div>
+    <h3>Samlede udgifter</h3>
+    <div class="value orange" id="totalExpenses">0 kr.</div>
   </div>
 
   <div class="card">
-    <h3>Projektresultat</h3>
-    <div class="value" id="dashResult">0 kr.</div>
+    <h3>Samlet resultat</h3>
+    <div class="value" id="totalResult">0 kr.</div>
   </div>
+
 </div>
 
 <div class="panel">
-<h2>Seneste projekter</h2>
-<div id="recentProjects"></div>
+<h2>Projektoversigt</h2>
+<div id="dashboardProjects"></div>
 </div>
 
 </section>
 
-<section id="projekter" class="hidden">
+<!-- PROJEKTER -->
+
+<section id="projects" class="section">
 
 <h1>Projekter</h1>
-<p class="subtitle">Opret og administrer dine nedrivningsprojekter</p>
+<p class="subtitle">Opret og administrer projekter</p>
 
 <div class="panel">
 
 <h2>Opret projekt</h2>
 
-<div class="form-grid">
-<input id="projectName" placeholder="Projektnavn">
-<input id="projectNumber" placeholder="Projektnummer">
-<input id="projectCustomer" placeholder="Kunde">
-<input id="projectAddress" placeholder="Adresse">
+<div class="formGrid">
+
+<input id="pName" placeholder="Projektnavn">
+<input id="pNumber" placeholder="Projektnummer">
+<input id="pCustomer" placeholder="Kunde">
+<input id="pAddress" placeholder="Adresse">
+
 </div>
 
 <button class="primary" onclick="addProject()">+ Opret projekt</button>
@@ -302,57 +474,66 @@ th {
 </div>
 
 <div class="panel">
-<h2>Projektoversigt</h2>
-<div id="projectsList"></div>
+<h2>Projekter</h2>
+<div id="projectList"></div>
 </div>
 
 </section>
 
-<section id="skrot" class="hidden">
+<!-- SKROT -->
 
-<h1>Skrotregistrering</h1>
-<p class="subtitle">Registrer metaller og skrot fra projekterne</p>
+<section id="scrap" class="section">
 
-<div class="panel">
-
-<h2>Registrer skrot</h2>
-
-<div class="form-grid">
-<select id="scrapProject"></select>
-<input id="scrapMaterial" placeholder="Materiale (fx jern, kobber, aluminium)">
-<input id="scrapKg" type="number" placeholder="Vægt i kg">
-<input id="scrapPrice" type="number" step="0.01" placeholder="Pris pr. kg">
-<input id="scrapReceiver" placeholder="Skrotplads">
-<input id="scrapVoucher" placeholder="Bilagsnummer">
-<input id="scrapDate" type="date">
-</div>
-
-<textarea id="scrapNotes" placeholder="Noter"></textarea>
-
-<button class="primary" onclick="addScrap()">+ Gem skrotregistrering</button>
-
-</div>
+<h1>Skrot</h1>
+<p class="subtitle">Registrer og følg skrotmaterialer</p>
 
 <div class="panel">
-<h2>Skrotregistreringer</h2>
+
+<h2>Ny skrotregistrering</h2>
+
+<div class="formGrid">
+
+<select id="sProject"></select>
+
+<input id="sMaterial" placeholder="Materiale">
+<input id="sKg" type="number" placeholder="Vægt (kg)">
+<input id="sPrice" type="number" step="0.01" placeholder="Pris pr. kg">
+
+<input id="sReceiver" placeholder="Modtager / skrotplads">
+<input id="sVoucher" placeholder="Bilagsnummer">
+<input id="sDate" type="date">
+
+</div>
+
+<textarea id="sNotes" placeholder="Noter"></textarea>
+
+<button class="primary" onclick="addScrap()">+ Gem registrering</button>
+
+</div>
+
+<div class="panel">
+<h2>Registreringer</h2>
 <div id="scrapList"></div>
 </div>
 
 </section>
 
-<section id="affald" class="hidden">
+<!-- AFFALD -->
+
+<section id="waste" class="section">
 
 <h1>Affald</h1>
-<p class="subtitle">Registrer affald og bortskaffelsesomkostninger</p>
+<p class="subtitle">Affaldsmængder og omkostninger</p>
 
 <div class="panel">
 
-<h2>Registrer affald</h2>
+<h2>Ny affaldsregistrering</h2>
 
-<div class="form-grid">
-<select id="wasteProject"></select>
+<div class="formGrid">
 
-<select id="wasteType">
+<select id="wProject"></select>
+
+<select id="wType">
 <option>Beton</option>
 <option>Mursten</option>
 <option>Træ</option>
@@ -369,11 +550,13 @@ th {
 <option>Andet</option>
 </select>
 
-<input id="wasteKg" type="number" placeholder="Vægt i kg">
-<input id="wastePrice" type="number" step="0.01" placeholder="Pris i kr.">
-<input id="wasteReceiver" placeholder="Modtageplads">
-<input id="wasteVoucher" placeholder="Bilagsnummer">
-<input id="wasteDate" type="date">
+<input id="wKg" type="number" placeholder="Vægt (kg)">
+<input id="wPrice" type="number" step="0.01" placeholder="Pris pr. kg">
+
+<input id="wReceiver" placeholder="Modtageplads">
+<input id="wVoucher" placeholder="Bilagsnummer">
+<input id="wDate" type="date">
+
 </div>
 
 <button class="primary" onclick="addWaste()">+ Gem affald</button>
@@ -387,19 +570,22 @@ th {
 
 </section>
 
-<section id="udgifter" class="hidden">
+<!-- UDGIFTER -->
+
+<section id="expenses" class="section">
 
 <h1>Udgifter</h1>
-<p class="subtitle">Registrer øvrige projektomkostninger</p>
+<p class="subtitle">Andre omkostninger på projekterne</p>
 
 <div class="panel">
 
-<h2>Opret udgift</h2>
+<h2>Registrer udgift</h2>
 
-<div class="form-grid">
-<select id="expenseProject"></select>
+<div class="formGrid">
 
-<select id="expenseCategory">
+<select id="eProject"></select>
+
+<select id="eCategory">
 <option>Transport</option>
 <option>Maskiner</option>
 <option>Materialer</option>
@@ -409,11 +595,13 @@ th {
 <option>Andet</option>
 </select>
 
-<input id="expenseDescription" placeholder="Beskrivelse">
-<input id="expenseAmount" type="number" step="0.01" placeholder="Beløb i kr.">
-<input id="expenseSupplier" placeholder="Leverandør">
-<input id="expenseVoucher" placeholder="Bilagsnummer">
-<input id="expenseDate" type="date">
+<input id="eDescription" placeholder="Beskrivelse">
+<input id="eAmount" type="number" step="0.01" placeholder="Beløb">
+
+<input id="eSupplier" placeholder="Leverandør">
+<input id="eVoucher" placeholder="Bilagsnummer">
+<input id="eDate" type="date">
+
 </div>
 
 <button class="primary" onclick="addExpense()">+ Gem udgift</button>
@@ -427,16 +615,48 @@ th {
 
 </section>
 
-<section id="rapporter" class="hidden">
+<!-- RAPPORTER -->
+
+<section id="reports" class="section">
 
 <h1>Rapporter</h1>
-<p class="subtitle">Økonomisk overblik over projekterne</p>
+<p class="subtitle">Økonomisk oversigt</p>
 
 <div class="panel">
 <h2>Projektresultater</h2>
 <div id="reportList"></div>
 
 <button class="primary" onclick="exportCSV()">📥 Eksporter CSV</button>
+
+</div>
+
+</section>
+
+<!-- INDSTILLINGER -->
+
+<section id="settings" class="section">
+
+<h1>Indstillinger</h1>
+<p class="subtitle">SCRAPLOG</p>
+
+<div class="panel">
+
+<h2>Virksomhedsoplysninger</h2>
+
+<input id="companyName" placeholder="Virksomhedsnavn">
+<input id="companyNumber" placeholder="CVR-nummer">
+<input id="companyEmail" placeholder="E-mail">
+
+<button class="primary" onclick="saveSettings()">Gem indstillinger</button>
+
+</div>
+
+<div class="panel">
+
+<h2>Data</h2>
+
+<button class="secondary" onclick="exportBackup()">Eksporter backup</button>
+
 </div>
 
 </section>
@@ -446,352 +666,563 @@ th {
 
 <script>
 
+/* SUPABASE */
+
+const SUPABASE_URL = "https://romdztjopcogwcmagiij.supabase.co";
+const SUPABASE_KEY = "sb_publishable_mj_keuzf5c6wVKmDyZ_1vQ_q8wSmnz5";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+/* DATA */
+
 let projects = JSON.parse(localStorage.getItem("scraplog_projects") || "[]");
 let scraps = JSON.parse(localStorage.getItem("scraplog_scraps") || "[]");
 let wastes = JSON.parse(localStorage.getItem("scraplog_wastes") || "[]");
 let expenses = JSON.parse(localStorage.getItem("scraplog_expenses") || "[]");
+let settings = JSON.parse(localStorage.getItem("scraplog_settings") || "{}");
 
-function saveData() {
-  localStorage.setItem("scraplog_projects", JSON.stringify(projects));
-  localStorage.setItem("scraplog_scraps", JSON.stringify(scraps));
-  localStorage.setItem("scraplog_wastes", JSON.stringify(wastes));
-  localStorage.setItem("scraplog_expenses", JSON.stringify(expenses));
+/* AUTH */
+
+function authMessage(text,color="#64748b") {
+  const el=document.getElementById("authMessage");
+  el.textContent=text;
+  el.style.color=color;
+}
+
+async function login() {
+
+  const email=document.getElementById("authEmail").value;
+  const password=document.getElementById("authPassword").value;
+
+  if(!email || !password) {
+    authMessage("Indtast e-mail og adgangskode","#dc4444");
+    return;
+  }
+
+  authMessage("Logger ind...");
+
+  const {data,error}=await db.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if(error) {
+    authMessage(error.message,"#dc4444");
+    return;
+  }
+
+  document.getElementById("loginScreen").classList.add("hidden");
   renderAll();
 }
 
-function money(value) {
-  return Number(value || 0).toLocaleString("da-DK", {
-    style: "currency",
-    currency: "DKK"
+async function signup() {
+
+  const email=document.getElementById("authEmail").value;
+  const password=document.getElementById("authPassword").value;
+
+  if(!email || !password) {
+    authMessage("Indtast e-mail og adgangskode","#dc4444");
+    return;
+  }
+
+  if(password.length<6) {
+    authMessage("Adgangskoden skal være mindst 6 tegn","#dc4444");
+    return;
+  }
+
+  authMessage("Opretter konto...");
+
+  const {data,error}=await db.auth.signUp({
+    email,
+    password
   });
+
+  if(error) {
+    authMessage(error.message,"#dc4444");
+    return;
+  }
+
+  authMessage("Konto oprettet. Tjek din e-mail for bekræftelse.","#168653");
 }
 
-function showPage(page, button) {
-  document.querySelectorAll("main section").forEach(s => s.classList.add("hidden"));
-  document.getElementById(page).classList.remove("hidden");
+async function resetPassword() {
 
-  document.querySelectorAll(".sidebar button").forEach(b => b.classList.remove("active"));
+  const email=document.getElementById("authEmail").value;
+
+  if(!email) {
+    authMessage("Indtast din e-mail først","#dc4444");
+    return;
+  }
+
+  const {error}=await db.auth.resetPasswordForEmail(email,{
+    redirectTo:window.location.origin
+  });
+
+  if(error) {
+    authMessage(error.message,"#dc4444");
+  } else {
+    authMessage("Nulstillingslink er sendt","#168653");
+  }
+}
+
+async function logout() {
+  await db.auth.signOut();
+  document.getElementById("loginScreen").classList.remove("hidden");
+}
+
+/* NAVIGATION */
+
+function navigate(id,button) {
+
+  document.querySelectorAll(".section").forEach(section=>{
+    section.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll(".sidebar button").forEach(btn=>{
+    btn.classList.remove("active");
+  });
 
   if(button) button.classList.add("active");
 
   renderAll();
 }
 
+/* STORAGE */
+
+function saveData() {
+
+  localStorage.setItem("scraplog_projects",JSON.stringify(projects));
+  localStorage.setItem("scraplog_scraps",JSON.stringify(scraps));
+  localStorage.setItem("scraplog_wastes",JSON.stringify(wastes));
+  localStorage.setItem("scraplog_expenses",JSON.stringify(expenses));
+
+  renderAll();
+}
+
+function money(value) {
+  return Number(value||0).toLocaleString("da-DK",{
+    style:"currency",
+    currency:"DKK"
+  });
+}
+
+function projectName(id) {
+  return projects.find(p=>String(p.id)===String(id))?.name || "Ukendt projekt";
+}
+
+function projectScrap(id) {
+  return scraps.filter(s=>String(s.projectId)===String(id))
+    .reduce((sum,s)=>sum+Number(s.total||0),0);
+}
+
+function projectWaste(id) {
+  return wastes.filter(w=>String(w.projectId)===String(id))
+    .reduce((sum,w)=>sum+Number(w.total||0),0);
+}
+
+function projectExpenses(id) {
+  return expenses.filter(e=>String(e.projectId)===String(id))
+    .reduce((sum,e)=>sum+Number(e.amount||0),0);
+}
+
+function projectKg(id) {
+  return scraps.filter(s=>String(s.projectId)===String(id))
+    .reduce((sum,s)=>sum+Number(s.kg||0),0);
+}
+
+/* PROJECTS */
+
 function addProject() {
-  const name = document.getElementById("projectName").value.trim();
+
+  const name=document.getElementById("pName").value.trim();
 
   if(!name) {
-    alert("Indtast et projektnavn");
+    alert("Indtast projektnavn");
     return;
   }
 
   projects.push({
-    id: Date.now(),
+    id:Date.now(),
     name,
-    number: document.getElementById("projectNumber").value,
-    customer: document.getElementById("projectCustomer").value,
-    address: document.getElementById("projectAddress").value,
-    date: new Date().toISOString().split("T")[0]
+    number:document.getElementById("pNumber").value,
+    customer:document.getElementById("pCustomer").value,
+    address:document.getElementById("pAddress").value,
+    date:new Date().toISOString().slice(0,10)
   });
 
-  document.getElementById("projectName").value = "";
-  document.getElementById("projectNumber").value = "";
-  document.getElementById("projectCustomer").value = "";
-  document.getElementById("projectAddress").value = "";
+  ["pName","pNumber","pCustomer","pAddress"].forEach(id=>{
+    document.getElementById(id).value="";
+  });
 
   saveData();
 }
 
-function addScrap() {
-  const projectId = document.getElementById("scrapProject").value;
-  const material = document.getElementById("scrapMaterial").value.trim();
-  const kg = Number(document.getElementById("scrapKg").value);
-  const price = Number(document.getElementById("scrapPrice").value);
+/* SCRAP */
 
-  if(!projectId || !material || kg <= 0) {
+function addScrap() {
+
+  const projectId=document.getElementById("sProject").value;
+  const material=document.getElementById("sMaterial").value.trim();
+  const kg=Number(document.getElementById("sKg").value);
+  const price=Number(document.getElementById("sPrice").value);
+
+  if(!projectId || !material || kg<=0) {
     alert("Vælg projekt, materiale og indtast vægt");
     return;
   }
 
   scraps.push({
-    id: Date.now(),
+    id:Date.now(),
     projectId,
     material,
     kg,
     price,
-    total: kg * price,
-    receiver: document.getElementById("scrapReceiver").value,
-    voucher: document.getElementById("scrapVoucher").value,
-    date: document.getElementById("scrapDate").value,
-    notes: document.getElementById("scrapNotes").value
+    total:kg*price,
+    receiver:document.getElementById("sReceiver").value,
+    voucher:document.getElementById("sVoucher").value,
+    date:document.getElementById("sDate").value,
+    notes:document.getElementById("sNotes").value
   });
 
-  document.getElementById("scrapMaterial").value = "";
-  document.getElementById("scrapKg").value = "";
-  document.getElementById("scrapPrice").value = "";
-  document.getElementById("scrapReceiver").value = "";
-  document.getElementById("scrapVoucher").value = "";
-  document.getElementById("scrapNotes").value = "";
+  ["sMaterial","sKg","sPrice","sReceiver","sVoucher","sNotes"].forEach(id=>{
+    document.getElementById(id).value="";
+  });
 
   saveData();
 }
 
-function addWaste() {
-  const projectId = document.getElementById("wasteProject").value;
-  const type = document.getElementById("wasteType").value;
-  const kg = Number(document.getElementById("wasteKg").value);
-  const price = Number(document.getElementById("wastePrice").value);
+/* WASTE */
 
-  if(!projectId || kg <= 0) {
+function addWaste() {
+
+  const projectId=document.getElementById("wProject").value;
+  const type=document.getElementById("wType").value;
+  const kg=Number(document.getElementById("wKg").value);
+  const price=Number(document.getElementById("wPrice").value);
+
+  if(!projectId || kg<=0) {
     alert("Vælg projekt og indtast vægt");
     return;
   }
 
   wastes.push({
-    id: Date.now(),
+    id:Date.now(),
     projectId,
     type,
     kg,
     price,
-    total: kg * price,
-    receiver: document.getElementById("wasteReceiver").value,
-    voucher: document.getElementById("wasteVoucher").value,
-    date: document.getElementById("wasteDate").value
+    total:kg*price,
+    receiver:document.getElementById("wReceiver").value,
+    voucher:document.getElementById("wVoucher").value,
+    date:document.getElementById("wDate").value
   });
 
-  document.getElementById("wasteKg").value = "";
-  document.getElementById("wastePrice").value = "";
-  document.getElementById("wasteReceiver").value = "";
-  document.getElementById("wasteVoucher").value = "";
+  ["wKg","wPrice","wReceiver","wVoucher"].forEach(id=>{
+    document.getElementById(id).value="";
+  });
 
   saveData();
 }
 
-function addExpense() {
-  const projectId = document.getElementById("expenseProject").value;
-  const amount = Number(document.getElementById("expenseAmount").value);
-  const description = document.getElementById("expenseDescription").value;
+/* EXPENSES */
 
-  if(!projectId || amount <= 0) {
+function addExpense() {
+
+  const projectId=document.getElementById("eProject").value;
+  const amount=Number(document.getElementById("eAmount").value);
+
+  if(!projectId || amount<=0) {
     alert("Vælg projekt og indtast beløb");
     return;
   }
 
   expenses.push({
-    id: Date.now(),
+    id:Date.now(),
     projectId,
-    category: document.getElementById("expenseCategory").value,
-    description,
+    category:document.getElementById("eCategory").value,
+    description:document.getElementById("eDescription").value,
     amount,
-    supplier: document.getElementById("expenseSupplier").value,
-    voucher: document.getElementById("expenseVoucher").value,
-    date: document.getElementById("expenseDate").value
+    supplier:document.getElementById("eSupplier").value,
+    voucher:document.getElementById("eVoucher").value,
+    date:document.getElementById("eDate").value
   });
 
-  document.getElementById("expenseAmount").value = "";
-  document.getElementById("expenseDescription").value = "";
-  document.getElementById("expenseSupplier").value = "";
-  document.getElementById("expenseVoucher").value = "";
+  ["eDescription","eAmount","eSupplier","eVoucher"].forEach(id=>{
+    document.getElementById(id).value="";
+  });
 
   saveData();
 }
 
-function projectName(id) {
-  return projects.find(p => String(p.id) === String(id))?.name || "Ukendt projekt";
-}
+/* DELETE */
 
-function projectScrap(id) {
-  return scraps.filter(s => String(s.projectId) === String(id))
-    .reduce((sum,s) => sum + s.total, 0);
-}
+function deleteItem(type,id) {
 
-function projectWaste(id) {
-  return wastes.filter(w => String(w.projectId) === String(id))
-    .reduce((sum,w) => sum + w.total, 0);
-}
-
-function projectExpenses(id) {
-  return expenses.filter(e => String(e.projectId) === String(id))
-    .reduce((sum,e) => sum + e.amount, 0);
-}
-
-function projectKg(id) {
-  return scraps.filter(s => String(s.projectId) === String(id))
-    .reduce((sum,s) => sum + s.kg, 0);
-}
-
-function deleteItem(type, id) {
   if(!confirm("Vil du slette denne registrering?")) return;
 
-  if(type === "project") {
-    projects = projects.filter(p => p.id !== id);
-    scraps = scraps.filter(s => String(s.projectId) !== String(id));
-    wastes = wastes.filter(w => String(w.projectId) !== String(id));
-    expenses = expenses.filter(e => String(e.projectId) !== String(id));
+  if(type==="project") {
+    projects=projects.filter(p=>p.id!==id);
+    scraps=scraps.filter(s=>String(s.projectId)!==String(id));
+    wastes=wastes.filter(w=>String(w.projectId)!==String(id));
+    expenses=expenses.filter(e=>String(e.projectId)!==String(id));
   }
 
-  if(type === "scrap") scraps = scraps.filter(x => x.id !== id);
-  if(type === "waste") wastes = wastes.filter(x => x.id !== id);
-  if(type === "expense") expenses = expenses.filter(x => x.id !== id);
+  if(type==="scrap") scraps=scraps.filter(s=>s.id!==id);
+  if(type==="waste") wastes=wastes.filter(w=>w.id!==id);
+  if(type==="expense") expenses=expenses.filter(e=>e.id!==id);
 
   saveData();
 }
 
-function renderProjects() {
-  const options = projects.map(p =>
-    `<option value="${p.id}">${p.name}</option>`
+/* PROJECT SELECTS */
+
+function renderSelects() {
+
+  const options=projects.map(p=>
+    `<option value="${p.id}">${escapeHTML(p.name)}</option>`
   ).join("");
 
-  ["scrapProject","wasteProject","expenseProject"].forEach(id => {
-    document.getElementById(id).innerHTML =
-      `<option value="">Vælg projekt</option>` + options;
+  ["sProject","wProject","eProject"].forEach(id=>{
+    document.getElementById(id).innerHTML=
+      '<option value="">Vælg projekt</option>'+options;
   });
+}
+
+/* SAFE TEXT */
+
+function escapeHTML(text) {
+  return String(text||"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/* RENDER PROJECTS */
+
+function renderProjects() {
 
   if(!projects.length) {
-    document.getElementById("projectsList").innerHTML =
-      '<p class="empty">Du har endnu ikke oprettet projekter.</p>';
+    document.getElementById("projectList").innerHTML=
+      '<p class="empty">Ingen projekter oprettet endnu.</p>';
     return;
   }
 
-  document.getElementById("projectsList").innerHTML = `
+  document.getElementById("projectList").innerHTML=`
   <table>
   <tr>
-  <th>Projekt</th>
-  <th>Kunde</th>
-  <th>Skrot</th>
-  <th>Udgifter</th>
-  <th>Resultat</th>
-  <th></th>
+    <th>Projekt</th>
+    <th>Kunde</th>
+    <th>Skrot</th>
+    <th>Udgifter</th>
+    <th>Resultat</th>
+    <th></th>
   </tr>
-  ${projects.map(p => `
+
+  ${projects.map(p=>`
   <tr>
-  <td>${p.name}</td>
-  <td>${p.customer || "-"}</td>
-  <td>${money(projectScrap(p.id))}</td>
-  <td>${money(projectWaste(p.id) + projectExpenses(p.id))}</td>
-  <td class="green">${money(projectScrap(p.id)-projectWaste(p.id)-projectExpenses(p.id))}</td>
-  <td><button class="delete" onclick="deleteItem('project',${p.id})">Slet</button></td>
+    <td>${escapeHTML(p.name)}</td>
+    <td>${escapeHTML(p.customer)}</td>
+    <td>${money(projectScrap(p.id))}</td>
+    <td>${money(projectWaste(p.id)+projectExpenses(p.id))}</td>
+    <td>${money(projectScrap(p.id)-projectWaste(p.id)-projectExpenses(p.id))}</td>
+    <td><button class="danger" onclick="deleteItem('project',${p.id})">Slet</button></td>
   </tr>
   `).join("")}
+
   </table>`;
 }
 
+/* RENDER SCRAP */
+
 function renderScrap() {
+
   if(!scraps.length) {
-    document.getElementById("scrapList").innerHTML =
+    document.getElementById("scrapList").innerHTML=
       '<p class="empty">Ingen skrotregistreringer endnu.</p>';
     return;
   }
 
-  document.getElementById("scrapList").innerHTML = `
+  document.getElementById("scrapList").innerHTML=`
   <table>
-  <tr><th>Projekt</th><th>Materiale</th><th>Kg</th><th>Pris/kg</th><th>Total</th><th></th></tr>
-  ${scraps.map(s => `
   <tr>
-  <td>${projectName(s.projectId)}</td>
-  <td>${s.material}</td>
-  <td>${s.kg.toLocaleString("da-DK")}</td>
-  <td>${money(s.price)}</td>
-  <td>${money(s.total)}</td>
-  <td><button class="delete" onclick="deleteItem('scrap',${s.id})">Slet</button></td>
-  </tr>`).join("")}
+    <th>Projekt</th>
+    <th>Materiale</th>
+    <th>Kg</th>
+    <th>Pris/kg</th>
+    <th>Total</th>
+    <th></th>
+  </tr>
+
+  ${scraps.map(s=>`
+  <tr>
+    <td>${escapeHTML(projectName(s.projectId))}</td>
+    <td>${escapeHTML(s.material)}</td>
+    <td>${Number(s.kg).toLocaleString("da-DK")}</td>
+    <td>${money(s.price)}</td>
+    <td>${money(s.total)}</td>
+    <td><button class="danger" onclick="deleteItem('scrap',${s.id})">Slet</button></td>
+  </tr>
+  `).join("")}
+
   </table>`;
 }
 
+/* RENDER WASTE */
+
 function renderWaste() {
+
   if(!wastes.length) {
-    document.getElementById("wasteList").innerHTML =
+    document.getElementById("wasteList").innerHTML=
       '<p class="empty">Ingen affaldsregistreringer endnu.</p>';
     return;
   }
 
-  document.getElementById("wasteList").innerHTML = `
+  document.getElementById("wasteList").innerHTML=`
   <table>
-  <tr><th>Projekt</th><th>Type</th><th>Kg</th><th>Pris/kg</th><th>Total</th><th></th></tr>
-  ${wastes.map(w => `
   <tr>
-  <td>${projectName(w.projectId)}</td>
-  <td>${w.type}</td>
-  <td>${w.kg.toLocaleString("da-DK")}</td>
-  <td>${money(w.price)}</td>
-  <td>${money(w.total)}</td>
-  <td><button class="delete" onclick="deleteItem('waste',${w.id})">Slet</button></td>
-  </tr>`).join("")}
+    <th>Projekt</th>
+    <th>Type</th>
+    <th>Kg</th>
+    <th>Pris/kg</th>
+    <th>Total</th>
+    <th></th>
+  </tr>
+
+  ${wastes.map(w=>`
+  <tr>
+    <td>${escapeHTML(projectName(w.projectId))}</td>
+    <td>${escapeHTML(w.type)}</td>
+    <td>${Number(w.kg).toLocaleString("da-DK")}</td>
+    <td>${money(w.price)}</td>
+    <td>${money(w.total)}</td>
+    <td><button class="danger" onclick="deleteItem('waste',${w.id})">Slet</button></td>
+  </tr>
+  `).join("")}
+
   </table>`;
 }
 
+/* RENDER EXPENSES */
+
 function renderExpenses() {
+
   if(!expenses.length) {
-    document.getElementById("expenseList").innerHTML =
+    document.getElementById("expenseList").innerHTML=
       '<p class="empty">Ingen udgifter endnu.</p>';
     return;
   }
 
-  document.getElementById("expenseList").innerHTML = `
+  document.getElementById("expenseList").innerHTML=`
   <table>
-  <tr><th>Projekt</th><th>Kategori</th><th>Beskrivelse</th><th>Beløb</th><th></th></tr>
-  ${expenses.map(e => `
   <tr>
-  <td>${projectName(e.projectId)}</td>
-  <td>${e.category}</td>
-  <td>${e.description || "-"}</td>
-  <td>${money(e.amount)}</td>
-  <td><button class="delete" onclick="deleteItem('expense',${e.id})">Slet</button></td>
-  </tr>`).join("")}
+    <th>Projekt</th>
+    <th>Kategori</th>
+    <th>Beskrivelse</th>
+    <th>Leverandør</th>
+    <th>Beløb</th>
+    <th></th>
+  </tr>
+
+  ${expenses.map(e=>`
+  <tr>
+    <td>${escapeHTML(projectName(e.projectId))}</td>
+    <td>${escapeHTML(e.category)}</td>
+    <td>${escapeHTML(e.description)}</td>
+    <td>${escapeHTML(e.supplier)}</td>
+    <td>${money(e.amount)}</td>
+    <td><button class="danger" onclick="deleteItem('expense',${e.id})">Slet</button></td>
+  </tr>
+  `).join("")}
+
   </table>`;
 }
 
-function renderDashboard() {
-  const totalScrap = scraps.reduce((sum,s) => sum + s.total,0);
-  const totalKg = scraps.reduce((sum,s) => sum + s.kg,0);
-  const totalExpenses =
-    wastes.reduce((sum,w) => sum + w.total,0) +
-    expenses.reduce((sum,e) => sum + e.amount,0);
+/* DASHBOARD */
 
-  document.getElementById("dashProjects").textContent = projects.length;
-  document.getElementById("dashScrap").textContent = money(totalScrap);
-  document.getElementById("dashKg").textContent = totalKg.toLocaleString("da-DK") + " kg";
-  document.getElementById("dashExpenses").textContent = money(totalExpenses);
-  document.getElementById("dashResult").textContent = money(totalScrap-totalExpenses);
+function renderDashboard() {
+
+  const scrapTotal=scraps.reduce((sum,s)=>sum+Number(s.total||0),0);
+  const kgTotal=scraps.reduce((sum,s)=>sum+Number(s.kg||0),0);
+  const expensesTotal=
+    wastes.reduce((sum,w)=>sum+Number(w.total||0),0)+
+    expenses.reduce((sum,e)=>sum+Number(e.amount||0),0);
+
+  document.getElementById("totalProjects").textContent=projects.length;
+  document.getElementById("totalScrap").textContent=money(scrapTotal);
+  document.getElementById("totalKg").textContent=kgTotal.toLocaleString("da-DK")+" kg";
+  document.getElementById("totalExpenses").textContent=money(expensesTotal);
+  document.getElementById("totalResult").textContent=money(scrapTotal-expensesTotal);
 
   if(!projects.length) {
-    document.getElementById("recentProjects").innerHTML =
+    document.getElementById("dashboardProjects").innerHTML=
       '<p class="empty">Opret dit første projekt for at komme i gang.</p>';
     return;
   }
 
-  document.getElementById("recentProjects").innerHTML = `
+  document.getElementById("dashboardProjects").innerHTML=`
   <table>
-  <tr><th>Projekt</th><th>Skrotindtægt</th><th>Udgifter</th><th>Resultat</th></tr>
-  ${projects.slice(-5).reverse().map(p => `
   <tr>
-  <td>${p.name}</td>
-  <td class="green">${money(projectScrap(p.id))}</td>
-  <td>${money(projectWaste(p.id)+projectExpenses(p.id))}</td>
-  <td>${money(projectScrap(p.id)-projectWaste(p.id)-projectExpenses(p.id))}</td>
-  </tr>`).join("")}
+    <th>Projekt</th>
+    <th>Skrotindtægt</th>
+    <th>Udgifter</th>
+    <th>Resultat</th>
+  </tr>
+
+  ${projects.slice(-5).reverse().map(p=>`
+  <tr>
+    <td>${escapeHTML(p.name)}</td>
+    <td>${money(projectScrap(p.id))}</td>
+    <td>${money(projectWaste(p.id)+projectExpenses(p.id))}</td>
+    <td>${money(projectScrap(p.id)-projectWaste(p.id)-projectExpenses(p.id))}</td>
+  </tr>
+  `).join("")}
+
   </table>`;
 }
+
+/* REPORTS */
 
 function renderReports() {
-  document.getElementById("reportList").innerHTML = `
+
+  document.getElementById("reportList").innerHTML=`
   <table>
-  <tr><th>Projekt</th><th>Skrotindtægt</th><th>Affald</th><th>Andre udgifter</th><th>Resultat</th></tr>
-  ${projects.map(p => `
   <tr>
-  <td>${p.name}</td>
-  <td>${money(projectScrap(p.id))}</td>
-  <td>${money(projectWaste(p.id))}</td>
-  <td>${money(projectExpenses(p.id))}</td>
-  <td>${money(projectScrap(p.id)-projectWaste(p.id)-projectExpenses(p.id))}</td>
-  </tr>`).join("")}
+    <th>Projekt</th>
+    <th>Skrot</th>
+    <th>Affald</th>
+    <th>Øvrige udgifter</th>
+    <th>Resultat</th>
+  </tr>
+
+  ${projects.map(p=>`
+  <tr>
+    <td>${escapeHTML(p.name)}</td>
+    <td>${money(projectScrap(p.id))}</td>
+    <td>${money(projectWaste(p.id))}</td>
+    <td>${money(projectExpenses(p.id))}</td>
+    <td>${money(projectScrap(p.id)-projectWaste(p.id)-projectExpenses(p.id))}</td>
+  </tr>
+  `).join("")}
+
   </table>`;
 }
 
-function exportCSV() {
-  let rows = [["Projekt","Skrotindtægt","Affald","Andre udgifter","Resultat"]];
+/* CSV */
 
-  projects.forEach(p => {
+function exportCSV() {
+
+  const rows=[
+    ["Projekt","Skrotindtægt","Affald","Andre udgifter","Resultat"]
+  ];
+
+  projects.forEach(p=>{
     rows.push([
       p.name,
       projectScrap(p.id),
@@ -801,27 +1232,109 @@ function exportCSV() {
     ]);
   });
 
-  const csv = rows.map(row =>
-    row.map(value => `"${String(value).replace(/"/g,'""')}"`).join(";")
+  const csv=rows.map(row=>
+    row.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")
   ).join("\n");
 
-  const blob = new Blob(["\ufeff"+csv], {type:"text/csv;charset=utf-8"});
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "SCRAPLOG_rapport.csv";
+  const blob=new Blob(["\ufeff"+csv],{
+    type:"text/csv;charset=utf-8"
+  });
+
+  const link=document.createElement("a");
+  link.href=URL.createObjectURL(blob);
+  link.download="SCRAPLOG_rapport.csv";
   link.click();
 }
 
+/* SETTINGS */
+
+function saveSettings() {
+
+  settings={
+    companyName:document.getElementById("companyName").value,
+    companyNumber:document.getElementById("companyNumber").value,
+    companyEmail:document.getElementById("companyEmail").value
+  };
+
+  localStorage.setItem("scraplog_settings",JSON.stringify(settings));
+
+  alert("Indstillinger gemt");
+}
+
+function loadSettings() {
+
+  document.getElementById("companyName").value=settings.companyName||"";
+  document.getElementById("companyNumber").value=settings.companyNumber||"";
+  document.getElementById("companyEmail").value=settings.companyEmail||"";
+}
+
+/* BACKUP */
+
+function exportBackup() {
+
+  const backup={
+    projects,
+    scraps,
+    wastes,
+    expenses,
+    settings
+  };
+
+  const blob=new Blob(
+    [JSON.stringify(backup,null,2)],
+    {type:"application/json"}
+  );
+
+  const link=document.createElement("a");
+  link.href=URL.createObjectURL(blob);
+  link.download="SCRAPLOG_backup.json";
+  link.click();
+}
+
+/* RENDER ALL */
+
 function renderAll() {
+
+  renderSelects();
   renderProjects();
   renderScrap();
   renderWaste();
   renderExpenses();
   renderDashboard();
   renderReports();
+  loadSettings();
 }
 
+/* CHECK LOGIN */
+
+async function checkLogin() {
+
+  const {data}=await db.auth.getSession();
+
+  if(data.session) {
+    document.getElementById("loginScreen").classList.add("hidden");
+  } else {
+    document.getElementById("loginScreen").classList.remove("hidden");
+  }
+
+}
+
+/* AUTH STATE */
+
+db.auth.onAuthStateChange((event,session)=>{
+
+  if(session) {
+    document.getElementById("loginScreen").classList.add("hidden");
+  } else {
+    document.getElementById("loginScreen").classList.remove("hidden");
+  }
+
+});
+
+/* START */
+
 renderAll();
+checkLogin();
 
 </script>
 
