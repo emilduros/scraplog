@@ -1,1013 +1,1075 @@
-
 <!DOCTYPE html>
 <html lang="da">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCRAPLOG | Projektstyring</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
+<style>
 :root {
-  --bg: #f4f6f3;
-  --white: #ffffff;
-  --nav: #17221e;
-  --nav2: #202d27;
-  --green: #55d68a;
-  --green-dark: #17824c;
-  --text: #202923;
-  --muted: #87928b;
-  --border: #e6ebe6;
-  --orange: #f4a340;
-  --red: #e76c64;
+    --green: #16a34a;
+    --dark: #14231c;
+    --bg: #f4f7f5;
+    --white: #ffffff;
+    --border: #e2e8e5;
+    --text: #1f2937;
+    --muted: #64748b;
 }
 
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
 }
 
-button { font-family: inherit; cursor: pointer; }
+.app {
+    display: flex;
+    min-height: 100vh;
+}
 
-.app { min-height: 100vh; display: flex; }
+/* SIDEBAR */
 
 .sidebar {
-  width: 245px;
-  background: var(--nav);
-  color: white;
-  min-height: 100vh;
-  padding: 27px 17px;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
+    width: 240px;
+    background: var(--dark);
+    color: white;
+    padding: 25px 15px;
+    flex-shrink: 0;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 0 10px 32px;
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 35px;
+    padding-left: 10px;
 }
 
-.logo-icon {
-  width: 38px; height: 38px;
-  background: var(--green);
-  border-radius: 11px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #143523;
-  font-size: 22px;
-  font-weight: 900;
+.logo span {
+    color: #4ade80;
 }
 
-.logo-name {
-  font-family: Manrope, sans-serif;
-  font-weight: 800;
-  font-size: 21px;
-  letter-spacing: -1px;
+.nav-item {
+    padding: 13px 15px;
+    border-radius: 8px;
+    margin-bottom: 7px;
+    cursor: pointer;
+    color: #cbd5e1;
+    transition: 0.2s;
 }
 
-.logo-name span { color: var(--green); }
-
-.nav-label {
-  color: #78867e;
-  text-transform: uppercase;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  padding: 13px 12px 9px;
+.nav-item:hover,
+.nav-item.active {
+    background: #263b30;
+    color: white;
 }
 
-.nav-btn {
-  border: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background: transparent;
-  color: #b5c1ba;
-  border-radius: 9px;
-  margin-bottom: 4px;
-  text-align: left;
-  font-size: 13px;
-  transition: .2s;
+.nav-item.active {
+    border-left: 3px solid var(--green);
 }
 
-.nav-btn:hover { background: var(--nav2); color: white; }
+/* MAIN */
 
-.nav-btn.active {
-  background: #2c3d33;
-  color: white;
+.main {
+    flex: 1;
+    padding: 30px;
+    min-width: 0;
 }
 
-.nav-btn.active .nav-icon { color: var(--green); }
-
-.nav-icon {
-  width: 20px;
-  font-size: 17px;
-  text-align: center;
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
-.sidebar-bottom { margin-top: auto; }
-
-.trial-box {
-  background: #24352b;
-  border: 1px solid #354b3c;
-  padding: 15px;
-  border-radius: 12px;
-  margin: 14px 3px;
+.header h1 {
+    margin: 0;
+    font-size: 28px;
 }
 
-.trial-box small { color: #9bad9f; font-size: 11px; }
-
-.trial-box strong {
-  display: block;
-  font-size: 14px;
-  margin: 7px 0;
+.subtitle {
+    color: var(--muted);
+    margin-top: 7px;
 }
 
-.trial-bar {
-  height: 5px;
-  border-radius: 5px;
-  background: #405447;
-  margin: 11px 0;
-  overflow: hidden;
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
 }
 
-.trial-bar div { width: 65%; height: 100%; background: var(--green); }
-
-.profile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 8px 0;
-  border-top: 1px solid #354139;
+.btn-primary {
+    background: var(--green);
+    color: white;
 }
 
-.avatar {
-  width: 35px; height: 35px;
-  border-radius: 50%;
-  background: #d4e8d8;
-  color: #25543a;
-  display: grid;
-  place-items: center;
-  font-weight: 700;
+.btn-primary:hover {
+    background: #15803d;
 }
 
-.profile strong { display: block; font-size: 12px; }
-.profile small { color: #89978e; font-size: 11px; }
-
-.main { flex: 1; min-width: 0; }
-
-.topbar {
-  height: 75px;
-  background: white;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 35px;
+.btn-secondary {
+    background: #e5e7eb;
+    color: #374151;
 }
 
-.top-left { display: flex; align-items: center; gap: 12px; }
-
-.topbar-label { font-size: 12px; color: var(--muted); }
-
-.top-right { display: flex; align-items: center; gap: 14px; }
-
-.search {
-  background: #f5f7f5;
-  border: 1px solid var(--border);
-  padding: 10px 13px;
-  border-radius: 8px;
-  width: 220px;
-  font-size: 12px;
-  outline: none;
+.btn-danger {
+    background: #fee2e2;
+    color: #b91c1c;
 }
 
-.search:focus { border-color: #9bd6b1; }
+/* CARDS */
 
-.icon-button {
-  border: 1px solid var(--border);
-  background: white;
-  width: 36px; height: 36px;
-  border-radius: 9px;
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
 }
 
-.mobile-menu { display: none; }
-
-.content {
-  padding: 30px 36px;
-  max-width: 1500px;
-  margin: auto;
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
 }
 
-.page-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 15px;
-  margin-bottom: 26px;
+.card-label {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
-.page-heading h1 {
-  font-family: Manrope, sans-serif;
-  font-size: 26px;
-  letter-spacing: -1px;
-  margin: 0 0 7px;
+.card-value {
+    font-size: 26px;
+    font-weight: bold;
 }
 
-.page-heading p { color: var(--muted); margin: 0; font-size: 13px; }
-
-.primary-btn {
-  border: none;
-  background: #1c3025;
-  color: white;
-  padding: 12px 17px;
-  border-radius: 9px;
-  font-size: 12px;
-  font-weight: 700;
+.card-icon {
+    font-size: 24px;
+    margin-bottom: 15px;
 }
 
-.primary-btn:hover { background: #294a35; }
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 17px;
-  margin-bottom: 22px;
-}
-
-.stat-card {
-  background: white;
-  border: 1px solid var(--border);
-  padding: 21px;
-  border-radius: 13px;
-}
-
-.stat-top { display: flex; justify-content: space-between; align-items: center; }
-
-.stat-icon {
-  width: 35px; height: 35px;
-  display: grid;
-  place-items: center;
-  border-radius: 9px;
-  background: #eff7f1;
-  font-size: 17px;
-}
-
-.stat-label { color: var(--muted); font-size: 12px; }
-
-.stat-value {
-  font-family: Manrope, sans-serif;
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: -.8px;
-  margin: 16px 0 5px;
-}
-
-.stat-foot { font-size: 11px; color: var(--muted); }
-.green-text { color: var(--green-dark); }
+/* CONTENT */
 
 .panel {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  padding: 22px;
-  margin-bottom: 20px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 25px;
+    overflow: hidden;
 }
 
-.panel-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  gap: 12px;
+.panel-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
-.panel-heading h2 {
-  font-family: Manrope, sans-serif;
-  font-size: 15px;
-  margin: 0;
-  letter-spacing: -.3px;
+.panel-header h2 {
+    margin: 0;
+    font-size: 18px;
 }
 
-.panel-heading small { color: var(--muted); font-size: 11px; }
-
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap: 20px;
+.panel-body {
+    padding: 20px;
 }
 
-.chart {
-  height: 230px;
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  padding: 10px 0 0;
-  border-bottom: 1px solid var(--border);
+.search {
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 260px;
+    max-width: 100%;
 }
-
-.chart-col {
-  flex: 1;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
-}
-
-.bar-pair {
-  height: calc(100% - 25px);
-  display: flex;
-  align-items: flex-end;
-  gap: 5px;
-  width: 100%;
-  justify-content: center;
-}
-
-.bar {
-  width: 35%;
-  border-radius: 5px 5px 0 0;
-  background: #c9e9d4;
-  min-height: 5px;
-}
-
-.bar.main-bar { background: #4fc783; }
-
-.chart-label { color: var(--muted); font-size: 10px; }
-
-.legend {
-  display: flex;
-  gap: 16px;
-  margin-top: 15px;
-  font-size: 11px;
-  color: var(--muted);
-}
-
-.legend span { display: flex; align-items: center; gap: 6px; }
-
-.legend i {
-  width: 8px; height: 8px;
-  border-radius: 3px;
-  display: inline-block;
-}
-
-.project-list { display: flex; flex-direction: column; gap: 14px; }
-
-.project-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 13px;
-  border-bottom: 1px solid #f0f2ef;
-}
-
-.project-row:last-child { border: 0; padding-bottom: 0; }
-
-.project-info { display: flex; align-items: center; gap: 10px; }
-
-.project-square {
-  width: 36px; height: 36px;
-  background: #f0f5f0;
-  border-radius: 9px;
-  display: grid;
-  place-items: center;
-  font-size: 16px;
-}
-
-.project-info strong { display: block; font-size: 12px; }
-.project-info small { color: var(--muted); font-size: 10px; margin-top: 4px; display: block; }
-
-.project-money { text-align: right; font-size: 12px; font-weight: 700; }
-.project-money small { display: block; color: var(--muted); font-weight: 400; font-size: 10px; margin-top: 4px; }
-
-.table-wrap { overflow-x: auto; }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
-  white-space: nowrap;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
 }
 
 th {
-  text-align: left;
-  color: #929b94;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: .6px;
-  font-weight: 600;
-  padding: 12px 10px;
-  border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+    background: #f9fafb;
 }
 
-td {
-  padding: 14px 10px;
-  border-bottom: 1px solid #f0f2ef;
-  font-size: 12px;
+tbody tr:hover {
+    background: #f9fafb;
 }
-
-tbody tr:last-child td { border-bottom: none; }
 
 .status {
-  display: inline-block;
-  padding: 5px 9px;
-  border-radius: 20px;
-  font-size: 10px;
-  background: #eef6ef;
-  color: #33814d;
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: #dcfce7;
+    color: #166534;
 }
 
-.status.orange { background: #fff4e3; color: #b67a24; }
-.status.gray { background: #f0f2f1; color: #717c75; }
-
-.amount { font-weight: 700; }
-
-.material-icon {
-  display: flex;
-  align-items: center;
-  gap: 9px;
+.status.completed {
+    background: #e5e7eb;
+    color: #374151;
 }
 
-.material-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: #61c88a;
+.status.planned {
+    background: #dbeafe;
+    color: #1d4ed8;
 }
 
-.material-dot.copper { background: #d88b55; }
-.material-dot.aluminum { background: #a8b4bf; }
-.material-dot.cable { background: #dfbf52; }
-
-.view { display: none; }
-.view.active { display: block; }
-
-.empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--muted);
+.actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
 }
 
-.empty-state div { font-size: 34px; margin-bottom: 12px; }
-.empty-state strong { color: var(--text); display: block; margin-bottom: 7px; }
-
-.modal-backdrop {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 25, 19, .55);
-  z-index: 20;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+.actions button {
+    padding: 7px 10px;
+    font-size: 12px;
 }
 
-.modal-backdrop.open { display: flex; }
+/* MODAL */
 
-.modal {
-  width: 100%;
-  max-width: 460px;
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-}
-
-.modal h2 { margin: 0 0 6px; font-size: 20px; font-family: Manrope; }
-.modal p { color: var(--muted); font-size: 12px; margin: 0 0 20px; }
-
-.form-group { margin-bottom: 14px; }
-.form-group label { display: block; font-size: 11px; margin-bottom: 6px; font-weight: 700; }
-
-.form-group input, .form-group select {
-  width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 11px;
-  font-family: inherit;
-  outline: none;
-}
-
-.form-group input:focus, .form-group select:focus { border-color: #71c88f; }
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 9px;
-  margin-top: 22px;
-}
-
-.secondary-btn {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 11px 15px;
-  font-size: 12px;
-}
-
-.notice {
-  padding: 13px 15px;
-  background: #fff9ed;
-  border: 1px solid #f4e6c9;
-  border-radius: 10px;
-  font-size: 11px;
-  color: #936a2c;
-  margin-bottom: 18px;
-}
-
-.report-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-}
-
-.report-card {
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  padding: 20px;
-}
-
-.report-card small { color: var(--muted); font-size: 11px; }
-.report-card h2 { font-size: 23px; margin: 10px 0; font-family: Manrope; }
-.report-card p { font-size: 11px; color: var(--muted); margin: 0; }
-
-.mobile-nav-overlay {
-  display: none;
-}
-
-@media(max-width: 1050px) {
-  .stats { grid-template-columns: repeat(2, 1fr); }
-  .dashboard-grid { grid-template-columns: 1fr; }
-}
-
-@media(max-width: 700px) {
-  .sidebar {
-    position: fixed;
-    z-index: 30;
-    left: -260px;
-    top: 0;
-    transition: .25s;
-  }
-  .sidebar.open { left: 0; }
-  .mobile-menu { display: inline-flex; }
-  .topbar { padding: 0 16px; height: 64px; }
-  .topbar-label { display: none; }
-  .search { width: 145px; }
-  .content { padding: 23px 16px; }
-  .page-heading h1 { font-size: 23px; }
-  .page-heading { align-items: center; }
-  .stats { gap: 10px; }
-  .stat-card { padding: 15px; }
-  .stat-value { font-size: 20px; }
-  .report-grid { grid-template-columns: 1fr; }
-  .panel { padding: 16px; }
-  .mobile-nav-overlay.open {
-    display: block;
+.modal-overlay {
     position: fixed;
     inset: 0;
-    z-index: 25;
-    background: rgba(0,0,0,.4);
-  }
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 100;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    padding: 25px;
+    border-radius: 14px;
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.form-group {
+    margin-bottom: 17px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 35px;
+}
+
+.view {
+    display: none;
+}
+
+.view.active {
+    display: block;
+}
+
+.mobile-menu {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        width: 65px;
+        padding: 15px 8px;
+    }
+
+    .logo {
+        font-size: 16px;
+        padding-left: 3px;
+    }
+
+    .nav-item {
+        font-size: 0;
+        text-align: center;
+        padding: 14px 5px;
+    }
+
+    .nav-item .icon {
+        font-size: 20px;
+    }
+
+    .main {
+        padding: 18px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .card-value {
+        font-size: 21px;
+    }
+
+    .header h1 {
+        font-size: 23px;
+    }
+
+    table {
+        min-width: 700px;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
 }
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
-<aside class="sidebar" id="sidebar">
-  <div class="logo">
-    <div class="logo-icon">S</div>
-    <div class="logo-name">SCRAP<span>LOG</span></div>
-  </div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
 
-  <div class="nav-label">Oversigt</div>
-  <button class="nav-btn active" data-view="dashboard"><span class="nav-icon">▦</span> Dashboard</button>
-  <button class="nav-btn" data-view="projects"><span class="nav-icon">▣</span> Projekter</button>
+    <div class="logo">SCRAP<span>LOG</span></div>
 
-  <div class="nav-label">Materialer</div>
-  <button class="nav-btn" data-view="metals"><span class="nav-icon">♻</span> Metaller & skrot</button>
-  <button class="nav-btn" data-view="waste"><span class="nav-icon">◈</span> Affald</button>
-
-  <div class="nav-label">Økonomi</div>
-  <button class="nav-btn" data-view="documents"><span class="nav-icon">▤</span> Bilag</button>
-  <button class="nav-btn" data-view="reports"><span class="nav-icon">▥</span> Rapporter</button>
-
-  <div class="sidebar-bottom">
-    <div class="trial-box">
-      <small>SCRAPLOG DEMO</small>
-      <strong>Velkommen til systemet</strong>
-      <div class="trial-bar"><div></div></div>
-      <small>Prototype · Demo-data</small>
+    <div class="nav-item active" onclick="showView('dashboard',this)">
+        <span class="icon">📊</span> Dashboard
     </div>
-    <div class="profile">
-      <div class="avatar">SD</div>
-      <div>
-        <strong>Demo virksomhed</strong>
-        <small>Nedrivning & miljø</small>
-      </div>
+
+    <div class="nav-item" onclick="showView('projects',this)">
+        <span class="icon">🏗️</span> Projekter
     </div>
-  </div>
+
+    <div class="nav-item" onclick="showView('metals',this)">
+        <span class="icon">♻️</span> Skrot & Metaller
+    </div>
+
+    <div class="nav-item" onclick="showView('waste',this)">
+        <span class="icon">🗑️</span> Affald
+    </div>
+
+    <div class="nav-item" onclick="showView('documents',this)">
+        <span class="icon">📄</span> Dokumenter
+    </div>
+
+    <div class="nav-item" onclick="showView('reports',this)">
+        <span class="icon">📈</span> Rapporter
+    </div>
+
 </aside>
 
-<div class="mobile-nav-overlay" id="overlay"></div>
-
+<!-- MAIN -->
 <main class="main">
-<header class="topbar">
-  <div class="top-left">
-    <button class="icon-button mobile-menu" id="menuBtn">☰</button>
-    <span class="topbar-label">Virksomhed /</span>
-    <strong style="font-size:13px">SCRAPLOG</strong>
-  </div>
-  <div class="top-right">
-    <input class="search" id="searchInput" placeholder="⌕  Søg i systemet...">
-    <button class="icon-button" title="Demo">♧</button>
-  </div>
-</header>
-
-<div class="content">
 
 <!-- DASHBOARD -->
-<section class="view active" id="dashboard">
-  <div class="page-heading">
-    <div>
-      <h1>Dashboard</h1>
-      <p>Overblik over virksomhedens projekter og økonomi.</p>
-    </div>
-    <button class="primary-btn" onclick="openProjectModal()">＋ Nyt projekt</button>
-  </div>
+<section id="dashboard" class="view active">
 
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-top"><span class="stat-label">Skrotindtægter</span><span class="stat-icon">♻️</span></div>
-      <div class="stat-value">128.450 kr.</div>
-      <div class="stat-foot"><span class="green-text">↑ 12,4%</span> vs. sidste måned</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-top"><span class="stat-label">Affaldsudgifter</span><span class="stat-icon">▤</span></div>
-      <div class="stat-value">46.280 kr.</div>
-      <div class="stat-foot">Registreret på projekter</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-top"><span class="stat-label">Netto</span><span class="stat-icon">↗</span></div>
-      <div class="stat-value green-text">82.170 kr.</div>
-      <div class="stat-foot">Skrot minus affald</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-top"><span class="stat-label">Aktive projekter</span><span class="stat-icon">▣</span></div>
-      <div class="stat-value" id="activeCount">4</div>
-      <div class="stat-foot">Igangværende opgaver</div>
-    </div>
-  </div>
+    <div class="header">
+        <div>
+            <h1>Dashboard</h1>
+            <div class="subtitle">Overblik over dine projekter</div>
+        </div>
 
-  <div class="dashboard-grid">
-    <div class="panel">
-      <div class="panel-heading">
-        <div><h2>Økonomisk udvikling</h2><small>Indtægter og udgifter · seneste 6 måneder</small></div>
-        <span class="status">2026</span>
-      </div>
-      <div class="chart">
-        <div class="chart-col"><div class="bar-pair"><div class="bar" style="height:40%"></div><div class="bar main-bar" style="height:65%"></div></div><span class="chart-label">Jan</span></div>
-        <div class="chart-col"><div class="bar-pair"><div class="bar" style="height:55%"></div><div class="bar main-bar" style="height:75%"></div></div><span class="chart-label">Feb</span></div>
-        <div class="chart-col"><div class="bar-pair"><div class="bar" style="height:35%"></div><div class="bar main-bar" style="height:60%"></div></div><span class="chart-label">Mar</span></div>
-        <div class="chart-col"><div class="bar-pair"><div class="bar" style="height:60%"></div><div class="bar main-bar" style="height:82%"></div></div><span class="chart-label">Apr</span></div>
-        <div class="chart-col"><div class="bar-pair"><div class="bar" style="height:45%"></div><div class="bar main-bar" style="height:90%"></div></div><span class="chart-label">Maj</span></div>
-        <div class="chart-col"><div class="bar-pair"><div class="bar" style="height:50%"></div><div class="bar main-bar" style="height:72%"></div></div><span class="chart-label">Jun</span></div>
-      </div>
-      <div class="legend"><span><i style="background:#c9e9d4"></i> Udgifter</span><span><i style="background:#4fc783"></i> Indtægter</span></div>
+        <button class="btn-primary" onclick="openProjectModal()">
+            + Nyt projekt
+        </button>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="card-icon">🏗️</div>
+            <div class="card-label">Aktive projekter</div>
+            <div class="card-value" id="activeProjects">0</div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">♻️</div>
+            <div class="card-label">Skrotindtægt</div>
+            <div class="card-value" id="scrapIncome">0 kr.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🗑️</div>
+            <div class="card-label">Affaldsomkostninger</div>
+            <div class="card-value" id="wasteCosts">0 kr.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">💰</div>
+            <div class="card-label">Netto</div>
+            <div class="card-value" id="netResult">0 kr.</div>
+        </div>
+
     </div>
 
     <div class="panel">
-      <div class="panel-heading"><h2>Aktive projekter</h2><small>4 projekter</small></div>
-      <div class="project-list" id="dashboardProjects"></div>
-    </div>
-  </div>
+        <div class="panel-header">
+            <h2>Seneste projekter</h2>
+            <button class="btn-secondary" onclick="showView('projects')">
+                Se alle
+            </button>
+        </div>
 
-  <div class="panel">
-    <div class="panel-heading"><h2>Seneste registreringer</h2><small>Demo-registreringer</small></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Materiale</th><th>Projekt</th><th>Vægt</th><th>Beløb</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td><span class="material-icon"><i class="material-dot"></i> Jern</span></td><td>Havnevej 12</td><td>8.450 kg</td><td class="amount">24.365 kr.</td><td><span class="status">Registreret</span></td></tr>
-          <tr><td><span class="material-icon"><i class="material-dot copper"></i> Kobber</span></td><td>Skoleprojekt</td><td>620 kg</td><td class="amount">38.750 kr.</td><td><span class="status">Registreret</span></td></tr>
-          <tr><td><span class="material-icon"><i class="material-dot aluminum"></i> Aluminium</span></td><td>Havnevej 12</td><td>1.250 kg</td><td class="amount">11.250 kr.</td><td><span class="status orange">Afventer bilag</span></td></tr>
-          <tr><td><span class="material-icon"><i class="material-dot cable"></i> Kabler</span></td><td>Fabrikken</td><td>340 kg</td><td class="amount">16.320 kr.</td><td><span class="status">Registreret</span></td></tr>
-        </tbody>
-      </table>
+        <div class="panel-body table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Projekt</th>
+                        <th>Lokation</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="dashboardProjects"></tbody>
+            </table>
+        </div>
     </div>
-  </div>
+
 </section>
 
 <!-- PROJECTS -->
-<section class="view" id="projects">
-  <div class="page-heading">
-    <div><h1>Projekter</h1><p>Administrér virksomhedens nedrivningsopgaver.</p></div>
-    <button class="primary-btn" onclick="openProjectModal()">＋ Nyt projekt</button>
-  </div>
-  <div class="panel">
-    <div class="panel-heading"><h2>Projektoversigt</h2><small id="projectCount">4 projekter</small></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Projekt</th><th>Lokation</th><th>Status</th><th>Skrotindtægt</th><th>Affald</th></tr></thead>
-        <tbody id="projectsTable"></tbody>
-      </table>
+<section id="projects" class="view">
+
+    <div class="header">
+        <div>
+            <h1>Projekter</h1>
+            <div class="subtitle">Administrer dine nedrivningsprojekter</div>
+        </div>
+
+        <button class="btn-primary" onclick="openProjectModal()">
+            + Opret projekt
+        </button>
     </div>
-  </div>
+
+    <div class="panel">
+
+        <div class="panel-header">
+            <h2>Projektoversigt</h2>
+
+            <input
+                class="search"
+                id="projectSearch"
+                placeholder="Søg efter projekt..."
+                oninput="renderProjects()"
+            >
+        </div>
+
+        <div class="panel-body table-wrap">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Projekt</th>
+                        <th>Lokation</th>
+                        <th>Status</th>
+                        <th>Oprettet</th>
+                        <th>Handlinger</th>
+                    </tr>
+                </thead>
+
+                <tbody id="projectsTable"></tbody>
+            </table>
+
+        </div>
+
+    </div>
+
 </section>
 
 <!-- METALS -->
-<section class="view" id="metals">
-  <div class="page-heading">
-    <div><h1>Metaller & skrot</h1><p>Overblik over materialer, vægt og skrotindtægter.</p></div>
-    <button class="primary-btn" onclick="alert('Registrering bliver tilføjet i en senere version.')">＋ Registrér skrot</button>
-  </div>
-  <div class="stats">
-    <div class="stat-card"><div class="stat-label">Samlet vægt</div><div class="stat-value">14.680 kg</div><div class="stat-foot">Registreret skrot</div></div>
-    <div class="stat-card"><div class="stat-label">Skrotindtægt</div><div class="stat-value">128.450 kr.</div><div class="stat-foot">Samlet salgsbeløb</div></div>
-    <div class="stat-card"><div class="stat-label">Gns. kg-pris</div><div class="stat-value">8,75 kr.</div><div class="stat-foot">På tværs af materialer</div></div>
-    <div class="stat-card"><div class="stat-label">Afregninger</div><div class="stat-value">12</div><div class="stat-foot">Demo-afregninger</div></div>
-  </div>
-  <div class="panel">
-    <div class="panel-heading"><h2>Materialeoversigt</h2><small>Alle registrerede metaller</small></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Materiale</th><th>Vægt</th><th>Pris/kg</th><th>Beløb</th><th>Projekt</th></tr></thead>
-        <tbody>
-          <tr><td><span class="material-icon"><i class="material-dot"></i> Jern</span></td><td>8.450 kg</td><td>2,88 kr.</td><td class="amount">24.365 kr.</td><td>Havnevej 12</td></tr>
-          <tr><td><span class="material-icon"><i class="material-dot copper"></i> Kobber</span></td><td>620 kg</td><td>62,50 kr.</td><td class="amount">38.750 kr.</td><td>Skoleprojekt</td></tr>
-          <tr><td><span class="material-icon"><i class="material-dot aluminum"></i> Aluminium</span></td><td>1.250 kg</td><td>9,00 kr.</td><td class="amount">11.250 kr.</td><td>Havnevej 12</td></tr>
-          <tr><td><span class="material-icon"><i class="material-dot cable"></i> Kabler</span></td><td>340 kg</td><td>48,00 kr.</td><td class="amount">16.320 kr.</td><td>Fabrikken</td></tr>
-          <tr><td><span class="material-icon"><i class="material-dot copper"></i> Messing</span></td><td>180 kg</td><td>37,50 kr.</td><td class="amount">6.750 kr.</td><td>Havnevej 12</td></tr>
-        </tbody>
-      </table>
+<section id="metals" class="view">
+
+    <div class="header">
+        <div>
+            <h1>Skrot & Metaller</h1>
+            <div class="subtitle">Registrering af skrot og metalindtægter</div>
+        </div>
     </div>
-  </div>
+
+    <div class="panel">
+        <div class="panel-body">
+            <h3>Skrotregistrering kommer i næste modul ♻️</h3>
+            <p>Her bygger vi registrering af materialer, vægt, kg-pris og indtjening pr. projekt.</p>
+        </div>
+    </div>
+
 </section>
 
 <!-- WASTE -->
-<section class="view" id="waste">
-  <div class="page-heading">
-    <div><h1>Affald</h1><p>Følg affaldsfraktioner, mængder og omkostninger.</p></div>
-    <button class="primary-btn" onclick="alert('Affaldsregistrering bliver tilføjet i en senere version.')">＋ Registrér affald</button>
-  </div>
-  <div class="stats">
-    <div class="stat-card"><div class="stat-label">Samlet affald</div><div class="stat-value">286 ton</div><div class="stat-foot">Registreret i demo</div></div>
-    <div class="stat-card"><div class="stat-label">Affaldsomkostninger</div><div class="stat-value">46.280 kr.</div><div class="stat-foot">Samlet bortskaffelse</div></div>
-    <div class="stat-card"><div class="stat-label">Fraktioner</div><div class="stat-value">8</div><div class="stat-foot">Forskellige typer</div></div>
-    <div class="stat-card"><div class="stat-label">Modtageanlæg</div><div class="stat-value">5</div><div class="stat-foot">Demo-destinationer</div></div>
-  </div>
-  <div class="panel">
-    <div class="panel-heading"><h2>Affaldsoversigt</h2></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Fraktion</th><th>Vægt</th><th>Modtageanlæg</th><th>Projekt</th><th>Omkostning</th></tr></thead>
-        <tbody>
-          <tr><td>Beton</td><td>112.000 kg</td><td>Genbrugsplads Nord</td><td>Havnevej 12</td><td class="amount">12.600 kr.</td></tr>
-          <tr><td>Mursten</td><td>48.000 kg</td><td>RGS</td><td>Skoleprojekt</td><td class="amount">4.800 kr.</td></tr>
-          <tr><td>Træ</td><td>26.500 kg</td><td>Vestforbrænding</td><td>Fabrikken</td><td class="amount">8.250 kr.</td></tr>
-          <tr><td>Gips</td><td>14.200 kg</td><td>Gipsdepot</td><td>Havnevej 12</td><td class="amount">5.680 kr.</td></tr>
-          <tr><td>Isolering</td><td>8.600 kg</td><td>Specialanlæg</td><td>Skoleprojekt</td><td class="amount">7.740 kr.</td></tr>
-          <tr><td>Blandet affald</td><td>76.700 kg</td><td>Modtageanlæg</td><td>Fabrikken</td><td class="amount">7.210 kr.</td></tr>
-        </tbody>
-      </table>
+<section id="waste" class="view">
+
+    <div class="header">
+        <div>
+            <h1>Affald</h1>
+            <div class="subtitle">Overblik over affald og omkostninger</div>
+        </div>
     </div>
-  </div>
+
+    <div class="panel">
+        <div class="panel-body">
+            <h3>Affaldsmodul kommer snart 🗑️</h3>
+            <p>Her bygger vi registrering af affaldstyper, mængder, modtageanlæg og omkostninger.</p>
+        </div>
+    </div>
+
 </section>
 
 <!-- DOCUMENTS -->
-<section class="view" id="documents">
-  <div class="page-heading">
-    <div><h1>Bilag</h1><p>Fakturaer, kreditnotaer og afregninger.</p></div>
-    <button class="primary-btn" onclick="document.getElementById('fileInput').click()">＋ Upload bilag</button>
-  </div>
-  <div class="notice">
-    <strong>Demo:</strong> Bilagsupload er kun visuel i denne version. Filer gemmes ikke permanent, og AI-udtræk er endnu ikke aktiveret.
-  </div>
-  <div class="stats">
-    <div class="stat-card"><div class="stat-label">Bilag</div><div class="stat-value" id="docCount">12</div><div class="stat-foot">Demo-dokumenter</div></div>
-    <div class="stat-card"><div class="stat-label">Kreditnotaer</div><div class="stat-value">7</div><div class="stat-foot">Skrotafregninger</div></div>
-    <div class="stat-card"><div class="stat-label">Fakturaer</div><div class="stat-value">5</div><div class="stat-foot">Udgiftsbilag</div></div>
-    <div class="stat-card"><div class="stat-label">Afventer kontrol</div><div class="stat-value">2</div><div class="stat-foot">Demo-status</div></div>
-  </div>
-  <div class="panel">
-    <div class="panel-heading"><h2>Dokumentoversigt</h2></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Fil</th><th>Type</th><th>Dato</th><th>Projekt</th><th>Beløb</th><th>Status</th></tr></thead>
-        <tbody id="documentsTable">
-          <tr><td>Skrotafregning_1024.pdf</td><td>Kreditnota</td><td>18.06.2026</td><td>Havnevej 12</td><td>24.365 kr.</td><td><span class="status">Registreret</span></td></tr>
-          <tr><td>Faktura_0082.pdf</td><td>Faktura</td><td>16.06.2026</td><td>Fabrikken</td><td>8.250 kr.</td><td><span class="status">Registreret</span></td></tr>
-          <tr><td>Skrot_0612.pdf</td><td>Kreditnota</td><td>12.06.2026</td><td>Skoleprojekt</td><td>38.750 kr.</td><td><span class="status orange">Afventer kontrol</span></td></tr>
-        </tbody>
-      </table>
+<section id="documents" class="view">
+
+    <div class="header">
+        <div>
+            <h1>Dokumenter</h1>
+            <div class="subtitle">Fakturaer, kvitteringer og bilag</div>
+        </div>
     </div>
-    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" multiple style="display:none">
-  </div>
+
+    <div class="panel">
+        <div class="panel-body">
+            <h3>Dokumentmodul kommer snart 📄</h3>
+            <p>Her bygger vi upload af fakturaer, vejesedler, kreditnotaer og automatisk dataudtræk.</p>
+        </div>
+    </div>
+
 </section>
 
 <!-- REPORTS -->
-<section class="view" id="reports">
-  <div class="page-heading">
-    <div><h1>Rapporter</h1><p>Økonomisk overblik på tværs af projekter.</p></div>
-    <button class="primary-btn" onclick="window.print()">⤓ Udskriv rapport</button>
-  </div>
-  <div class="report-grid">
-    <div class="report-card"><small>Samlede skrotindtægter</small><h2>128.450 kr.</h2><p>Indtægt fra metal og skrot</p></div>
-    <div class="report-card"><small>Samlede affaldsudgifter</small><h2>46.280 kr.</h2><p>Udgifter til bortskaffelse</p></div>
-    <div class="report-card"><small>Nettoresultat</small><h2 class="green-text">82.170 kr.</h2><p>Skrot minus affald</p></div>
-  </div>
-  <div class="panel" style="margin-top:20px">
-    <div class="panel-heading"><h2>Projektøkonomi</h2></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Projekt</th><th>Skrotindtægt</th><th>Affaldsudgift</th><th>Netto</th></tr></thead>
-        <tbody>
-          <tr><td>Havnevej 12</td><td>52.365 kr.</td><td>18.280 kr.</td><td class="amount green-text">34.085 kr.</td></tr>
-          <tr><td>Skoleprojekt</td><td>43.750 kr.</td><td>12.540 kr.</td><td class="amount green-text">31.210 kr.</td></tr>
-          <tr><td>Fabrikken</td><td>32.335 kr.</td><td>15.460 kr.</td><td class="amount green-text">16.875 kr.</td></tr>
-        </tbody>
-      </table>
+<section id="reports" class="view">
+
+    <div class="header">
+        <div>
+            <h1>Rapporter</h1>
+            <div class="subtitle">Økonomisk overblik over projekterne</div>
+        </div>
     </div>
-  </div>
+
+    <div class="panel">
+        <div class="panel-body">
+            <h3>Rapportmodul kommer snart 📈</h3>
+            <p>Her samler vi indtægter, udgifter og projektresultater.</p>
+        </div>
+    </div>
+
 </section>
 
-</div>
 </main>
 </div>
 
 <!-- PROJECT MODAL -->
-<div class="modal-backdrop" id="projectModal">
-  <div class="modal">
-    <h2>Opret projekt</h2>
-    <p>Tilføj et nyt nedrivningsprojekt til oversigten.</p>
-    <form id="projectForm">
-      <div class="form-group">
-        <label>Projektnavn</label>
-        <input id="projectName" required placeholder="F.eks. Industrivej 24">
-      </div>
-      <div class="form-group">
-        <label>Lokation</label>
-        <input id="projectLocation" placeholder="Adresse eller by">
-      </div>
-      <div class="form-group">
-        <label>Status</label>
-        <select id="projectStatus">
-          <option>Igangværende</option>
-          <option>Planlagt</option>
-          <option>Afsluttet</option>
-        </select>
-      </div>
-      <div class="modal-actions">
-        <button type="button" class="secondary-btn" onclick="closeProjectModal()">Annuller</button>
-        <button type="submit" class="primary-btn">Opret projekt</button>
-      </div>
-    </form>
-  </div>
+<div class="modal-overlay" id="projectModal">
+
+    <div class="modal">
+
+        <h2 id="modalTitle">Opret projekt</h2>
+
+        <form id="projectForm">
+
+            <input type="hidden" id="projectId">
+
+            <div class="form-group">
+                <label>Projektnavn *</label>
+                <input
+                    id="projectName"
+                    type="text"
+                    required
+                    placeholder="F.eks. Nedrivning Havnevej 12"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Lokation</label>
+                <input
+                    id="projectLocation"
+                    type="text"
+                    placeholder="Adresse eller by"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+
+                <select id="projectStatus">
+                    <option value="Aktiv">Aktiv</option>
+                    <option value="Planlagt">Planlagt</option>
+                    <option value="Afsluttet">Afsluttet</option>
+                </select>
+            </div>
+
+            <div class="modal-buttons">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="closeProjectModal()"
+                >
+                    Annuller
+                </button>
+
+                <button type="submit" class="btn-primary">
+                    Gem projekt
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
 
 <script>
-const projects = [
-  {name:"Havnevej 12", location:"Frederikssund", status:"Igangværende", income:52365, waste:18280},
-  {name:"Skoleprojekt", location:"Hillerød", status:"Igangværende", income:43750, waste:12540},
-  {name:"Fabrikken", location:"København", status:"Igangværende", income:32335, waste:15460},
-  {name:"Lagerbygning", location:"Roskilde", status:"Planlagt", income:0, waste:0}
-];
 
-const fmt = n => n.toLocaleString("da-DK") + " kr.";
+/* =====================================
+   SCRAPLOG PROJECT SYSTEM
+===================================== */
 
-function renderProjects(){
-  document.getElementById("projectsTable").innerHTML = projects.map(p => `
-    <tr>
-      <td><strong>${escapeHTML(p.name)}</strong></td>
-      <td>${escapeHTML(p.location || "-")}</td>
-      <td><span class="status ${p.status==="Planlagt"?"orange":p.status==="Afsluttet"?"gray":""}">${escapeHTML(p.status)}</span></td>
-      <td class="amount">${fmt(p.income)}</td>
-      <td class="amount">${fmt(p.waste)}</td>
-    </tr>
-  `).join("");
+const STORAGE_KEY = "scraplog_projects_v1";
 
-  document.getElementById("projectCount").textContent = projects.length + " projekter";
-  document.getElementById("activeCount").textContent = projects.filter(p => p.status==="Igangværende").length;
+/* Load projects */
+function loadProjects() {
 
-  document.getElementById("dashboardProjects").innerHTML = projects.slice(0,4).map(p => `
-    <div class="project-row">
-      <div class="project-info">
-        <div class="project-square">⌂</div>
-        <div><strong>${escapeHTML(p.name)}</strong><small>${escapeHTML(p.location || "Ingen lokation")}</small></div>
-      </div>
-      <div class="project-money">${fmt(p.income)}<small>Skrotindtægt</small></div>
-    </div>
-  `).join("");
+    try {
+
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (saved) {
+            return JSON.parse(saved);
+        }
+
+    } catch (error) {
+        console.error("Kunne ikke hente projekter:", error);
+    }
+
+    return [];
+
 }
 
-function escapeHTML(s){
-  return String(s).replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+/* Initial projects */
+let projects = loadProjects();
+
+/* Save projects */
+function saveProjects() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(projects)
+    );
+
 }
 
-function openProjectModal(){
-  document.getElementById("projectModal").classList.add("open");
+/* HTML security helper */
+function escapeHTML(value) {
+
+    return String(value ?? "").replace(/[&<>"']/g, function(char) {
+
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        }[char];
+
+    });
+
 }
 
-function closeProjectModal(){
-  document.getElementById("projectModal").classList.remove("open");
+/* Format date */
+function formatDate(date) {
+
+    return new Date(date).toLocaleDateString("da-DK");
+
 }
 
-document.getElementById("projectForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  projects.unshift({
-    name:document.getElementById("projectName").value,
-    location:document.getElementById("projectLocation").value,
-    status:document.getElementById("projectStatus").value,
-    income:0,
-    waste:0
-  });
-  renderProjects();
-  closeProjectModal();
-  this.reset();
-  showView("projects");
-});
+/* Format currency */
+function formatCurrency(value) {
 
-function showView(view){
-  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-  document.getElementById(view).classList.add("active");
+    return Number(value || 0).toLocaleString("da-DK", {
+        style: "currency",
+        currency: "DKK",
+        maximumFractionDigits: 0
+    });
 
-  document.querySelectorAll(".nav-btn").forEach(b => {
-    b.classList.toggle("active", b.dataset.view===view);
-  });
-
-  const titles = {
-    dashboard:"Dashboard",
-    projects:"Projekter",
-    metals:"Metaller & skrot",
-    waste:"Affald",
-    documents:"Bilag",
-    reports:"Rapporter"
-  };
-  document.querySelector(".topbar-label").textContent = "SCRAPLOG /";
-  document.querySelector(".top-left strong").textContent = titles[view] || "SCRAPLOG";
-
-  closeMobileMenu();
 }
 
-document.querySelectorAll(".nav-btn").forEach(btn=>{
-  btn.addEventListener("click",()=>showView(btn.dataset.view));
-});
+/* Render projects */
+function renderProjects() {
 
-document.getElementById("menuBtn").addEventListener("click",()=>{
-  document.getElementById("sidebar").classList.toggle("open");
-  document.getElementById("overlay").classList.toggle("open");
-});
+    const table = document.getElementById("projectsTable");
+    const dashboard = document.getElementById("dashboardProjects");
 
-function closeMobileMenu(){
-  document.getElementById("sidebar").classList.remove("open");
-  document.getElementById("overlay").classList.remove("open");
+    const searchInput = document.getElementById("projectSearch");
+
+    const search = searchInput
+        ? searchInput.value.toLowerCase()
+        : "";
+
+    const filtered = projects.filter(project => {
+
+        return (
+            project.name.toLowerCase().includes(search) ||
+            project.location.toLowerCase().includes(search)
+        );
+
+    });
+
+    if (filtered.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    Ingen projekter fundet.
+                </td>
+            </tr>
+        `;
+
+    } else {
+
+        table.innerHTML = filtered.map(project => {
+
+            let statusClass = "";
+
+            if (project.status === "Afsluttet") {
+                statusClass = "completed";
+            }
+
+            if (project.status === "Planlagt") {
+                statusClass = "planned";
+            }
+
+            return `
+                <tr>
+                    <td><strong>${escapeHTML(project.name)}</strong></td>
+
+                    <td>${escapeHTML(project.location || "-")}</td>
+
+                    <td>
+                        <span class="status ${statusClass}">
+                            ${escapeHTML(project.status)}
+                        </span>
+                    </td>
+
+                    <td>${formatDate(project.createdAt)}</td>
+
+                    <td>
+                        <div class="actions">
+                            <button
+                                class="btn-secondary"
+                                onclick="editProject('${project.id}')"
+                            >
+                                Rediger
+                            </button>
+
+                            <button
+                                class="btn-danger"
+                                onclick="deleteProject('${project.id}')"
+                            >
+                                Slet
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+        }).join("");
+
+    }
+
+    /* Dashboard recent projects */
+
+    const latest = [...projects].slice(-5).reverse();
+
+    if (latest.length === 0) {
+
+        dashboard.innerHTML = `
+            <tr>
+                <td colspan="3" class="empty">
+                    Opret dit første projekt.
+                </td>
+            </tr>
+        `;
+
+    } else {
+
+        dashboard.innerHTML = latest.map(project => {
+
+            let statusClass = "";
+
+            if (project.status === "Afsluttet") {
+                statusClass = "completed";
+            }
+
+            if (project.status === "Planlagt") {
+                statusClass = "planned";
+            }
+
+            return `
+                <tr>
+                    <td><strong>${escapeHTML(project.name)}</strong></td>
+                    <td>${escapeHTML(project.location || "-")}</td>
+                    <td>
+                        <span class="status ${statusClass}">
+                            ${escapeHTML(project.status)}
+                        </span>
+                    </td>
+                </tr>
+            `;
+
+        }).join("");
+
+    }
+
+    updateDashboard();
+
 }
 
-document.getElementById("overlay").addEventListener("click",closeMobileMenu);
+/* Dashboard update */
+function updateDashboard() {
 
-document.getElementById("searchInput").addEventListener("input",function(){
-  const term = this.value.toLowerCase();
-  document.querySelectorAll("tbody tr").forEach(row=>{
-    row.style.display = row.innerText.toLowerCase().includes(term) ? "" : "none";
-  });
-});
+    const active = projects.filter(
+        project => project.status === "Aktiv"
+    ).length;
 
-document.getElementById("fileInput").addEventListener("change",function(){
-  const files = [...this.files];
-  if(!files.length) return;
-  const tbody = document.getElementById("documentsTable");
-  files.forEach(file=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${escapeHTML(file.name)}</td>
-      <td>Upload</td>
-      <td>${new Date().toLocaleDateString("da-DK")}</td>
-      <td>Ikke valgt</td>
-      <td>—</td>
-      <td><span class="status orange">Demo · ikke gemt</span></td>`;
-    tbody.prepend(tr);
-  });
-  document.getElementById("docCount").textContent =
-    Number(document.getElementById("docCount").textContent) + files.length;
-  alert(files.length + " fil(er) vist i demo. De er ikke gemt permanent.");
-  this.value="";
-});
+    document.getElementById("activeProjects").textContent = active;
 
-document.getElementById("projectModal").addEventListener("click",function(e){
-  if(e.target===this) closeProjectModal();
-});
+    /* Placeholder until scrap and waste modules are connected */
+    document.getElementById("scrapIncome").textContent = "0 kr.";
+    document.getElementById("wasteCosts").textContent = "0 kr.";
+    document.getElementById("netResult").textContent = "0 kr.";
 
+}
+
+/* Open create modal */
+function openProjectModal() {
+
+    document.getElementById("projectForm").reset();
+    document.getElementById("projectId").value = "";
+    document.getElementById("modalTitle").textContent = "Opret projekt";
+
+    document.getElementById("projectModal").classList.add("show");
+
+}
+
+/* Close modal */
+function closeProjectModal() {
+
+    document.getElementById("projectModal").classList.remove("show");
+
+}
+
+/* Edit project */
+function editProject(id) {
+
+    const project = projects.find(
+        project => project.id === id
+    );
+
+    if (!project) return;
+
+    document.getElementById("projectId").value = project.id;
+    document.getElementById("projectName").value = project.name;
+    document.getElementById("projectLocation").value = project.location;
+    document.getElementById("projectStatus").value = project.status;
+
+    document.getElementById("modalTitle").textContent = "Rediger projekt";
+
+    document.getElementById("projectModal").classList.add("show");
+
+}
+
+/* Delete project */
+function deleteProject(id) {
+
+    const project = projects.find(
+        project => project.id === id
+    );
+
+    if (!project) return;
+
+    const confirmDelete = confirm(
+        "Er du sikker på, at du vil slette projektet '" +
+        project.name +
+        "'?"
+    );
+
+    if (!confirmDelete) return;
+
+    projects = projects.filter(
+        project => project.id !== id
+    );
+
+    saveProjects();
+    renderProjects();
+
+}
+
+/* Save project form */
+document.getElementById("projectForm").addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        const id = document.getElementById("projectId").value;
+
+        const name = document.getElementById("projectName").value.trim();
+
+        const location = document.getElementById("projectLocation").value.trim();
+
+        const status = document.getElementById("projectStatus").value;
+
+        if (!name) {
+            alert("Indtast venligst et projektnavn.");
+            return;
+        }
+
+        if (id) {
+
+            const existing = projects.find(
+                project => project.id === id
+            );
+
+            if (existing) {
+
+                existing.name = name;
+                existing.location = location;
+                existing.status = status;
+
+            }
+
+        } else {
+
+            const newProject = {
+
+                id: crypto.randomUUID(),
+
+                name: name,
+
+                location: location,
+
+                status: status,
+
+                createdAt: new Date().toISOString()
+
+            };
+
+            projects.push(newProject);
+
+        }
+
+        saveProjects();
+        renderProjects();
+        closeProjectModal();
+
+    }
+);
+
+/* Navigation */
+function showView(viewId, navElement) {
+
+    document.querySelectorAll(".view").forEach(view => {
+
+        view.classList.remove("active");
+
+    });
+
+    document.getElementById(viewId).classList.add("active");
+
+    document.querySelectorAll(".nav-item").forEach(item => {
+
+        item.classList.remove("active");
+
+    });
+
+    if (navElement) {
+        navElement.classList.add("active");
+    } else {
+
+        document.querySelectorAll(".nav-item").forEach(item => {
+
+            if (item.getAttribute("onclick").includes(viewId)) {
+                item.classList.add("active");
+            }
+
+        });
+
+    }
+
+}
+
+/* Click outside modal */
+document.getElementById("projectModal").addEventListener(
+    "click",
+    function(event) {
+
+        if (event.target === this) {
+            closeProjectModal();
+        }
+
+    }
+);
+
+/* Initial render */
 renderProjects();
+
 </script>
+
 </body>
 </html>
