@@ -3,1071 +3,825 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SCRAPLOG | Projektstyring</title>
+<title>SCRAPLOG</title>
 
 <style>
-:root {
-    --green: #16a34a;
-    --dark: #14231c;
-    --bg: #f4f7f5;
-    --white: #ffffff;
-    --border: #e2e8e5;
-    --text: #1f2937;
-    --muted: #64748b;
-}
-
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
+  font-family: Arial, sans-serif;
+  background: #f3f5f7;
+  color: #1f2937;
 }
 
-.app {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* SIDEBAR */
-
-.sidebar {
-    width: 240px;
-    background: var(--dark);
-    color: white;
-    padding: 25px 15px;
-    flex-shrink: 0;
+header {
+  background: #17232e;
+  color: white;
+  padding: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
-    font-size: 26px;
-    font-weight: bold;
-    margin-bottom: 35px;
-    padding-left: 10px;
+  font-size: 27px;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
 .logo span {
-    color: #4ade80;
+  color: #f5a623;
 }
 
-.nav-item {
-    padding: 13px 15px;
-    border-radius: 8px;
-    margin-bottom: 7px;
-    cursor: pointer;
-    color: #cbd5e1;
-    transition: 0.2s;
+header p {
+  color: #cbd5e1;
+  font-size: 13px;
 }
 
-.nav-item:hover,
-.nav-item.active {
-    background: #263b30;
-    color: white;
+.container {
+  display: flex;
+  min-height: calc(100vh - 75px);
 }
 
-.nav-item.active {
-    border-left: 3px solid var(--green);
+.sidebar {
+  width: 220px;
+  background: #202e3a;
+  padding: 20px;
 }
 
-/* MAIN */
+.sidebar button {
+  width: 100%;
+  padding: 13px;
+  margin-bottom: 7px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.sidebar button:hover,
+.sidebar button.active {
+  background: #34495a;
+}
 
 .main {
-    flex: 1;
-    padding: 30px;
-    min-width: 0;
+  flex: 1;
+  padding: 25px;
+  min-width: 0;
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 28px;
+h1 {
+  margin-bottom: 8px;
 }
 
 .subtitle {
-    color: var(--muted);
-    margin-top: 7px;
+  color: #6b7280;
+  margin-bottom: 25px;
 }
-
-button {
-    border: none;
-    border-radius: 8px;
-    padding: 12px 18px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-.btn-primary {
-    background: var(--green);
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #15803d;
-}
-
-.btn-secondary {
-    background: #e5e7eb;
-    color: #374151;
-}
-
-.btn-danger {
-    background: #fee2e2;
-    color: #b91c1c;
-}
-
-/* CARDS */
 
 .cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    margin-bottom: 25px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
 }
 
 .card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 22px;
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+  box-shadow: 0 2px 7px #00000008;
 }
 
-.card-label {
-    color: var(--muted);
-    font-size: 14px;
-    margin-bottom: 10px;
+.card h3 {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 12px;
 }
 
-.card-value {
-    font-size: 26px;
-    font-weight: bold;
+.card .value {
+  font-size: 27px;
+  font-weight: bold;
 }
 
-.card-icon {
-    font-size: 24px;
-    margin-bottom: 15px;
+.green {
+  color: #168653;
 }
 
-/* CONTENT */
+.orange {
+  color: #e99b15;
+}
 
 .panel {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 25px;
-    overflow: hidden;
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+  margin-bottom: 20px;
 }
 
-.panel-header {
-    padding: 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
+.panel h2 {
+  margin-bottom: 18px;
 }
 
-.panel-header h2 {
-    margin: 0;
-    font-size: 18px;
+button.primary {
+  background: #f5a623;
+  color: #17232e;
+  border: none;
+  padding: 11px 17px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 15px;
 }
 
-.panel-body {
-    padding: 20px;
+button.primary:hover {
+  background: #e99b15;
 }
 
-.search {
-    padding: 11px 14px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    width: 260px;
-    max-width: 100%;
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 11px;
+  margin-bottom: 12px;
+  border: 1px solid #d8dee5;
+  border-radius: 7px;
+  font-size: 14px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
 }
 
 th, td {
-    padding: 14px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 th {
-    color: var(--muted);
-    font-size: 13px;
-    background: #f9fafb;
-}
-
-tbody tr:hover {
-    background: #f9fafb;
-}
-
-.status {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    background: #dcfce7;
-    color: #166534;
-}
-
-.status.completed {
-    background: #e5e7eb;
-    color: #374151;
-}
-
-.status.planned {
-    background: #dbeafe;
-    color: #1d4ed8;
-}
-
-.actions {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.actions button {
-    padding: 7px 10px;
-    font-size: 12px;
-}
-
-/* MODAL */
-
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 100;
-}
-
-.modal-overlay.show {
-    display: flex;
-}
-
-.modal {
-    background: white;
-    width: 100%;
-    max-width: 500px;
-    padding: 25px;
-    border-radius: 14px;
-}
-
-.modal h2 {
-    margin-top: 0;
-}
-
-.form-group {
-    margin-bottom: 17px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 7px;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-}
-
-.modal-buttons {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    margin-top: 20px;
+  background: #f8fafc;
+  font-size: 13px;
 }
 
 .empty {
+  color: #9ca3af;
+  padding: 20px 0;
+}
+
+.delete {
+  background: #fee2e2;
+  color: #991b1b;
+  border: none;
+  padding: 7px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+@media(max-width:750px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+  }
+
+  .sidebar button {
+    min-width: 120px;
+    margin: 3px;
     text-align: center;
-    color: var(--muted);
-    padding: 35px;
-}
+  }
 
-.view {
-    display: none;
-}
-
-.view.active {
-    display: block;
-}
-
-.mobile-menu {
-    display: none;
-}
-
-@media (max-width: 1000px) {
-    .cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 700px) {
-    .sidebar {
-        width: 65px;
-        padding: 15px 8px;
-    }
-
-    .logo {
-        font-size: 16px;
-        padding-left: 3px;
-    }
-
-    .nav-item {
-        font-size: 0;
-        text-align: center;
-        padding: 14px 5px;
-    }
-
-    .nav-item .icon {
-        font-size: 20px;
-    }
-
-    .main {
-        padding: 18px;
-    }
-
-    .cards {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-
-    .card {
-        padding: 15px;
-    }
-
-    .card-value {
-        font-size: 21px;
-    }
-
-    .header h1 {
-        font-size: 23px;
-    }
-
-    table {
-        min-width: 700px;
-    }
-
-    .table-wrap {
-        overflow-x: auto;
-    }
+  .main {
+    padding: 15px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<header>
+  <div class="logo">SCRAP<span>LOG</span></div>
+  <p>Projektstyring & Materialeøkonomi</p>
+</header>
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
+<div class="container">
 
-    <div class="logo">SCRAP<span>LOG</span></div>
+<nav class="sidebar">
+  <button class="active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
+  <button onclick="showPage('projekter',this)">🏗️ Projekter</button>
+  <button onclick="showPage('skrot',this)">♻️ Skrot</button>
+  <button onclick="showPage('affald',this)">🚛 Affald</button>
+  <button onclick="showPage('udgifter',this)">💰 Udgifter</button>
+  <button onclick="showPage('rapporter',this)">📈 Rapporter</button>
+</nav>
 
-    <div class="nav-item active" onclick="showView('dashboard',this)">
-        <span class="icon">📊</span> Dashboard
-    </div>
-
-    <div class="nav-item" onclick="showView('projects',this)">
-        <span class="icon">🏗️</span> Projekter
-    </div>
-
-    <div class="nav-item" onclick="showView('metals',this)">
-        <span class="icon">♻️</span> Skrot & Metaller
-    </div>
-
-    <div class="nav-item" onclick="showView('waste',this)">
-        <span class="icon">🗑️</span> Affald
-    </div>
-
-    <div class="nav-item" onclick="showView('documents',this)">
-        <span class="icon">📄</span> Dokumenter
-    </div>
-
-    <div class="nav-item" onclick="showView('reports',this)">
-        <span class="icon">📈</span> Rapporter
-    </div>
-
-</aside>
-
-<!-- MAIN -->
 <main class="main">
 
-<!-- DASHBOARD -->
-<section id="dashboard" class="view active">
+<section id="dashboard">
 
-    <div class="header">
-        <div>
-            <h1>Dashboard</h1>
-            <div class="subtitle">Overblik over dine projekter</div>
-        </div>
+<h1>Dashboard</h1>
+<p class="subtitle">Overblik over din virksomhed</p>
 
-        <button class="btn-primary" onclick="openProjectModal()">
-            + Nyt projekt
-        </button>
-    </div>
+<div class="cards">
+  <div class="card">
+    <h3>Aktive projekter</h3>
+    <div class="value" id="dashProjects">0</div>
+  </div>
 
-    <div class="cards">
+  <div class="card">
+    <h3>Skrotindtægt</h3>
+    <div class="value green" id="dashScrap">0 kr.</div>
+  </div>
 
-        <div class="card">
-            <div class="card-icon">🏗️</div>
-            <div class="card-label">Aktive projekter</div>
-            <div class="card-value" id="activeProjects">0</div>
-        </div>
+  <div class="card">
+    <h3>Samlet skrot</h3>
+    <div class="value" id="dashKg">0 kg</div>
+  </div>
 
-        <div class="card">
-            <div class="card-icon">♻️</div>
-            <div class="card-label">Skrotindtægt</div>
-            <div class="card-value" id="scrapIncome">0 kr.</div>
-        </div>
+  <div class="card">
+    <h3>Udgifter</h3>
+    <div class="value orange" id="dashExpenses">0 kr.</div>
+  </div>
 
-        <div class="card">
-            <div class="card-icon">🗑️</div>
-            <div class="card-label">Affaldsomkostninger</div>
-            <div class="card-value" id="wasteCosts">0 kr.</div>
-        </div>
+  <div class="card">
+    <h3>Projektresultat</h3>
+    <div class="value" id="dashResult">0 kr.</div>
+  </div>
+</div>
 
-        <div class="card">
-            <div class="card-icon">💰</div>
-            <div class="card-label">Netto</div>
-            <div class="card-value" id="netResult">0 kr.</div>
-        </div>
-
-    </div>
-
-    <div class="panel">
-        <div class="panel-header">
-            <h2>Seneste projekter</h2>
-            <button class="btn-secondary" onclick="showView('projects')">
-                Se alle
-            </button>
-        </div>
-
-        <div class="panel-body table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Projekt</th>
-                        <th>Lokation</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="dashboardProjects"></tbody>
-            </table>
-        </div>
-    </div>
+<div class="panel">
+<h2>Seneste projekter</h2>
+<div id="recentProjects"></div>
+</div>
 
 </section>
 
-<!-- PROJECTS -->
-<section id="projects" class="view">
+<section id="projekter" class="hidden">
 
-    <div class="header">
-        <div>
-            <h1>Projekter</h1>
-            <div class="subtitle">Administrer dine nedrivningsprojekter</div>
-        </div>
+<h1>Projekter</h1>
+<p class="subtitle">Opret og administrer dine nedrivningsprojekter</p>
 
-        <button class="btn-primary" onclick="openProjectModal()">
-            + Opret projekt
-        </button>
-    </div>
+<div class="panel">
 
-    <div class="panel">
+<h2>Opret projekt</h2>
 
-        <div class="panel-header">
-            <h2>Projektoversigt</h2>
+<div class="form-grid">
+<input id="projectName" placeholder="Projektnavn">
+<input id="projectNumber" placeholder="Projektnummer">
+<input id="projectCustomer" placeholder="Kunde">
+<input id="projectAddress" placeholder="Adresse">
+</div>
 
-            <input
-                class="search"
-                id="projectSearch"
-                placeholder="Søg efter projekt..."
-                oninput="renderProjects()"
-            >
-        </div>
+<button class="primary" onclick="addProject()">+ Opret projekt</button>
 
-        <div class="panel-body table-wrap">
+</div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Projekt</th>
-                        <th>Lokation</th>
-                        <th>Status</th>
-                        <th>Oprettet</th>
-                        <th>Handlinger</th>
-                    </tr>
-                </thead>
-
-                <tbody id="projectsTable"></tbody>
-            </table>
-
-        </div>
-
-    </div>
+<div class="panel">
+<h2>Projektoversigt</h2>
+<div id="projectsList"></div>
+</div>
 
 </section>
 
-<!-- METALS -->
-<section id="metals" class="view">
+<section id="skrot" class="hidden">
 
-    <div class="header">
-        <div>
-            <h1>Skrot & Metaller</h1>
-            <div class="subtitle">Registrering af skrot og metalindtægter</div>
-        </div>
-    </div>
+<h1>Skrotregistrering</h1>
+<p class="subtitle">Registrer metaller og skrot fra projekterne</p>
 
-    <div class="panel">
-        <div class="panel-body">
-            <h3>Skrotregistrering kommer i næste modul ♻️</h3>
-            <p>Her bygger vi registrering af materialer, vægt, kg-pris og indtjening pr. projekt.</p>
-        </div>
-    </div>
+<div class="panel">
 
-</section>
+<h2>Registrer skrot</h2>
 
-<!-- WASTE -->
-<section id="waste" class="view">
+<div class="form-grid">
+<select id="scrapProject"></select>
+<input id="scrapMaterial" placeholder="Materiale (fx jern, kobber, aluminium)">
+<input id="scrapKg" type="number" placeholder="Vægt i kg">
+<input id="scrapPrice" type="number" step="0.01" placeholder="Pris pr. kg">
+<input id="scrapReceiver" placeholder="Skrotplads">
+<input id="scrapVoucher" placeholder="Bilagsnummer">
+<input id="scrapDate" type="date">
+</div>
 
-    <div class="header">
-        <div>
-            <h1>Affald</h1>
-            <div class="subtitle">Overblik over affald og omkostninger</div>
-        </div>
-    </div>
+<textarea id="scrapNotes" placeholder="Noter"></textarea>
 
-    <div class="panel">
-        <div class="panel-body">
-            <h3>Affaldsmodul kommer snart 🗑️</h3>
-            <p>Her bygger vi registrering af affaldstyper, mængder, modtageanlæg og omkostninger.</p>
-        </div>
-    </div>
+<button class="primary" onclick="addScrap()">+ Gem skrotregistrering</button>
+
+</div>
+
+<div class="panel">
+<h2>Skrotregistreringer</h2>
+<div id="scrapList"></div>
+</div>
 
 </section>
 
-<!-- DOCUMENTS -->
-<section id="documents" class="view">
+<section id="affald" class="hidden">
 
-    <div class="header">
-        <div>
-            <h1>Dokumenter</h1>
-            <div class="subtitle">Fakturaer, kvitteringer og bilag</div>
-        </div>
-    </div>
+<h1>Affald</h1>
+<p class="subtitle">Registrer affald og bortskaffelsesomkostninger</p>
 
-    <div class="panel">
-        <div class="panel-body">
-            <h3>Dokumentmodul kommer snart 📄</h3>
-            <p>Her bygger vi upload af fakturaer, vejesedler, kreditnotaer og automatisk dataudtræk.</p>
-        </div>
-    </div>
+<div class="panel">
+
+<h2>Registrer affald</h2>
+
+<div class="form-grid">
+<select id="wasteProject"></select>
+
+<select id="wasteType">
+<option>Beton</option>
+<option>Mursten</option>
+<option>Træ</option>
+<option>Gips</option>
+<option>Jord</option>
+<option>Asfalt</option>
+<option>Isolering</option>
+<option>Glas</option>
+<option>Plast</option>
+<option>Metal</option>
+<option>Blandet byggeaffald</option>
+<option>Restaffald</option>
+<option>Farligt affald</option>
+<option>Andet</option>
+</select>
+
+<input id="wasteKg" type="number" placeholder="Vægt i kg">
+<input id="wastePrice" type="number" step="0.01" placeholder="Pris i kr.">
+<input id="wasteReceiver" placeholder="Modtageplads">
+<input id="wasteVoucher" placeholder="Bilagsnummer">
+<input id="wasteDate" type="date">
+</div>
+
+<button class="primary" onclick="addWaste()">+ Gem affald</button>
+
+</div>
+
+<div class="panel">
+<h2>Affaldsoversigt</h2>
+<div id="wasteList"></div>
+</div>
 
 </section>
 
-<!-- REPORTS -->
-<section id="reports" class="view">
+<section id="udgifter" class="hidden">
 
-    <div class="header">
-        <div>
-            <h1>Rapporter</h1>
-            <div class="subtitle">Økonomisk overblik over projekterne</div>
-        </div>
-    </div>
+<h1>Udgifter</h1>
+<p class="subtitle">Registrer øvrige projektomkostninger</p>
 
-    <div class="panel">
-        <div class="panel-body">
-            <h3>Rapportmodul kommer snart 📈</h3>
-            <p>Her samler vi indtægter, udgifter og projektresultater.</p>
-        </div>
-    </div>
+<div class="panel">
+
+<h2>Opret udgift</h2>
+
+<div class="form-grid">
+<select id="expenseProject"></select>
+
+<select id="expenseCategory">
+<option>Transport</option>
+<option>Maskiner</option>
+<option>Materialer</option>
+<option>Underentreprenør</option>
+<option>Løn</option>
+<option>Brændstof</option>
+<option>Andet</option>
+</select>
+
+<input id="expenseDescription" placeholder="Beskrivelse">
+<input id="expenseAmount" type="number" step="0.01" placeholder="Beløb i kr.">
+<input id="expenseSupplier" placeholder="Leverandør">
+<input id="expenseVoucher" placeholder="Bilagsnummer">
+<input id="expenseDate" type="date">
+</div>
+
+<button class="primary" onclick="addExpense()">+ Gem udgift</button>
+
+</div>
+
+<div class="panel">
+<h2>Udgiftsoversigt</h2>
+<div id="expenseList"></div>
+</div>
+
+</section>
+
+<section id="rapporter" class="hidden">
+
+<h1>Rapporter</h1>
+<p class="subtitle">Økonomisk overblik over projekterne</p>
+
+<div class="panel">
+<h2>Projektresultater</h2>
+<div id="reportList"></div>
+
+<button class="primary" onclick="exportCSV()">📥 Eksporter CSV</button>
+</div>
 
 </section>
 
 </main>
 </div>
 
-<!-- PROJECT MODAL -->
-<div class="modal-overlay" id="projectModal">
-
-    <div class="modal">
-
-        <h2 id="modalTitle">Opret projekt</h2>
-
-        <form id="projectForm">
-
-            <input type="hidden" id="projectId">
-
-            <div class="form-group">
-                <label>Projektnavn *</label>
-                <input
-                    id="projectName"
-                    type="text"
-                    required
-                    placeholder="F.eks. Nedrivning Havnevej 12"
-                >
-            </div>
-
-            <div class="form-group">
-                <label>Lokation</label>
-                <input
-                    id="projectLocation"
-                    type="text"
-                    placeholder="Adresse eller by"
-                >
-            </div>
-
-            <div class="form-group">
-                <label>Status</label>
-
-                <select id="projectStatus">
-                    <option value="Aktiv">Aktiv</option>
-                    <option value="Planlagt">Planlagt</option>
-                    <option value="Afsluttet">Afsluttet</option>
-                </select>
-            </div>
-
-            <div class="modal-buttons">
-
-                <button
-                    type="button"
-                    class="btn-secondary"
-                    onclick="closeProjectModal()"
-                >
-                    Annuller
-                </button>
-
-                <button type="submit" class="btn-primary">
-                    Gem projekt
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
-
-</div>
-
 <script>
 
-/* =====================================
-   SCRAPLOG PROJECT SYSTEM
-===================================== */
+let projects = JSON.parse(localStorage.getItem("scraplog_projects") || "[]");
+let scraps = JSON.parse(localStorage.getItem("scraplog_scraps") || "[]");
+let wastes = JSON.parse(localStorage.getItem("scraplog_wastes") || "[]");
+let expenses = JSON.parse(localStorage.getItem("scraplog_expenses") || "[]");
 
-const STORAGE_KEY = "scraplog_projects_v1";
-
-/* Load projects */
-function loadProjects() {
-
-    try {
-
-        const saved = localStorage.getItem(STORAGE_KEY);
-
-        if (saved) {
-            return JSON.parse(saved);
-        }
-
-    } catch (error) {
-        console.error("Kunne ikke hente projekter:", error);
-    }
-
-    return [];
-
+function saveData() {
+  localStorage.setItem("scraplog_projects", JSON.stringify(projects));
+  localStorage.setItem("scraplog_scraps", JSON.stringify(scraps));
+  localStorage.setItem("scraplog_wastes", JSON.stringify(wastes));
+  localStorage.setItem("scraplog_expenses", JSON.stringify(expenses));
+  renderAll();
 }
 
-/* Initial projects */
-let projects = loadProjects();
-
-/* Save projects */
-function saveProjects() {
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(projects)
-    );
-
+function money(value) {
+  return Number(value || 0).toLocaleString("da-DK", {
+    style: "currency",
+    currency: "DKK"
+  });
 }
 
-/* HTML security helper */
-function escapeHTML(value) {
+function showPage(page, button) {
+  document.querySelectorAll("main section").forEach(s => s.classList.add("hidden"));
+  document.getElementById(page).classList.remove("hidden");
 
-    return String(value ?? "").replace(/[&<>"']/g, function(char) {
+  document.querySelectorAll(".sidebar button").forEach(b => b.classList.remove("active"));
 
-        return {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#039;"
-        }[char];
+  if(button) button.classList.add("active");
 
-    });
-
+  renderAll();
 }
 
-/* Format date */
-function formatDate(date) {
+function addProject() {
+  const name = document.getElementById("projectName").value.trim();
 
-    return new Date(date).toLocaleDateString("da-DK");
+  if(!name) {
+    alert("Indtast et projektnavn");
+    return;
+  }
 
+  projects.push({
+    id: Date.now(),
+    name,
+    number: document.getElementById("projectNumber").value,
+    customer: document.getElementById("projectCustomer").value,
+    address: document.getElementById("projectAddress").value,
+    date: new Date().toISOString().split("T")[0]
+  });
+
+  document.getElementById("projectName").value = "";
+  document.getElementById("projectNumber").value = "";
+  document.getElementById("projectCustomer").value = "";
+  document.getElementById("projectAddress").value = "";
+
+  saveData();
 }
 
-/* Format currency */
-function formatCurrency(value) {
+function addScrap() {
+  const projectId = document.getElementById("scrapProject").value;
+  const material = document.getElementById("scrapMaterial").value.trim();
+  const kg = Number(document.getElementById("scrapKg").value);
+  const price = Number(document.getElementById("scrapPrice").value);
 
-    return Number(value || 0).toLocaleString("da-DK", {
-        style: "currency",
-        currency: "DKK",
-        maximumFractionDigits: 0
-    });
+  if(!projectId || !material || kg <= 0) {
+    alert("Vælg projekt, materiale og indtast vægt");
+    return;
+  }
 
+  scraps.push({
+    id: Date.now(),
+    projectId,
+    material,
+    kg,
+    price,
+    total: kg * price,
+    receiver: document.getElementById("scrapReceiver").value,
+    voucher: document.getElementById("scrapVoucher").value,
+    date: document.getElementById("scrapDate").value,
+    notes: document.getElementById("scrapNotes").value
+  });
+
+  document.getElementById("scrapMaterial").value = "";
+  document.getElementById("scrapKg").value = "";
+  document.getElementById("scrapPrice").value = "";
+  document.getElementById("scrapReceiver").value = "";
+  document.getElementById("scrapVoucher").value = "";
+  document.getElementById("scrapNotes").value = "";
+
+  saveData();
 }
 
-/* Render projects */
+function addWaste() {
+  const projectId = document.getElementById("wasteProject").value;
+  const type = document.getElementById("wasteType").value;
+  const kg = Number(document.getElementById("wasteKg").value);
+  const price = Number(document.getElementById("wastePrice").value);
+
+  if(!projectId || kg <= 0) {
+    alert("Vælg projekt og indtast vægt");
+    return;
+  }
+
+  wastes.push({
+    id: Date.now(),
+    projectId,
+    type,
+    kg,
+    price,
+    total: kg * price,
+    receiver: document.getElementById("wasteReceiver").value,
+    voucher: document.getElementById("wasteVoucher").value,
+    date: document.getElementById("wasteDate").value
+  });
+
+  document.getElementById("wasteKg").value = "";
+  document.getElementById("wastePrice").value = "";
+  document.getElementById("wasteReceiver").value = "";
+  document.getElementById("wasteVoucher").value = "";
+
+  saveData();
+}
+
+function addExpense() {
+  const projectId = document.getElementById("expenseProject").value;
+  const amount = Number(document.getElementById("expenseAmount").value);
+  const description = document.getElementById("expenseDescription").value;
+
+  if(!projectId || amount <= 0) {
+    alert("Vælg projekt og indtast beløb");
+    return;
+  }
+
+  expenses.push({
+    id: Date.now(),
+    projectId,
+    category: document.getElementById("expenseCategory").value,
+    description,
+    amount,
+    supplier: document.getElementById("expenseSupplier").value,
+    voucher: document.getElementById("expenseVoucher").value,
+    date: document.getElementById("expenseDate").value
+  });
+
+  document.getElementById("expenseAmount").value = "";
+  document.getElementById("expenseDescription").value = "";
+  document.getElementById("expenseSupplier").value = "";
+  document.getElementById("expenseVoucher").value = "";
+
+  saveData();
+}
+
+function projectName(id) {
+  return projects.find(p => String(p.id) === String(id))?.name || "Ukendt projekt";
+}
+
+function projectScrap(id) {
+  return scraps.filter(s => String(s.projectId) === String(id))
+    .reduce((sum,s) => sum + s.total, 0);
+}
+
+function projectWaste(id) {
+  return wastes.filter(w => String(w.projectId) === String(id))
+    .reduce((sum,w) => sum + w.total, 0);
+}
+
+function projectExpenses(id) {
+  return expenses.filter(e => String(e.projectId) === String(id))
+    .reduce((sum,e) => sum + e.amount, 0);
+}
+
+function projectKg(id) {
+  return scraps.filter(s => String(s.projectId) === String(id))
+    .reduce((sum,s) => sum + s.kg, 0);
+}
+
+function deleteItem(type, id) {
+  if(!confirm("Vil du slette denne registrering?")) return;
+
+  if(type === "project") {
+    projects = projects.filter(p => p.id !== id);
+    scraps = scraps.filter(s => String(s.projectId) !== String(id));
+    wastes = wastes.filter(w => String(w.projectId) !== String(id));
+    expenses = expenses.filter(e => String(e.projectId) !== String(id));
+  }
+
+  if(type === "scrap") scraps = scraps.filter(x => x.id !== id);
+  if(type === "waste") wastes = wastes.filter(x => x.id !== id);
+  if(type === "expense") expenses = expenses.filter(x => x.id !== id);
+
+  saveData();
+}
+
 function renderProjects() {
+  const options = projects.map(p =>
+    `<option value="${p.id}">${p.name}</option>`
+  ).join("");
 
-    const table = document.getElementById("projectsTable");
-    const dashboard = document.getElementById("dashboardProjects");
+  ["scrapProject","wasteProject","expenseProject"].forEach(id => {
+    document.getElementById(id).innerHTML =
+      `<option value="">Vælg projekt</option>` + options;
+  });
 
-    const searchInput = document.getElementById("projectSearch");
+  if(!projects.length) {
+    document.getElementById("projectsList").innerHTML =
+      '<p class="empty">Du har endnu ikke oprettet projekter.</p>';
+    return;
+  }
 
-    const search = searchInput
-        ? searchInput.value.toLowerCase()
-        : "";
-
-    const filtered = projects.filter(project => {
-
-        return (
-            project.name.toLowerCase().includes(search) ||
-            project.location.toLowerCase().includes(search)
-        );
-
-    });
-
-    if (filtered.length === 0) {
-
-        table.innerHTML = `
-            <tr>
-                <td colspan="5" class="empty">
-                    Ingen projekter fundet.
-                </td>
-            </tr>
-        `;
-
-    } else {
-
-        table.innerHTML = filtered.map(project => {
-
-            let statusClass = "";
-
-            if (project.status === "Afsluttet") {
-                statusClass = "completed";
-            }
-
-            if (project.status === "Planlagt") {
-                statusClass = "planned";
-            }
-
-            return `
-                <tr>
-                    <td><strong>${escapeHTML(project.name)}</strong></td>
-
-                    <td>${escapeHTML(project.location || "-")}</td>
-
-                    <td>
-                        <span class="status ${statusClass}">
-                            ${escapeHTML(project.status)}
-                        </span>
-                    </td>
-
-                    <td>${formatDate(project.createdAt)}</td>
-
-                    <td>
-                        <div class="actions">
-                            <button
-                                class="btn-secondary"
-                                onclick="editProject('${project.id}')"
-                            >
-                                Rediger
-                            </button>
-
-                            <button
-                                class="btn-danger"
-                                onclick="deleteProject('${project.id}')"
-                            >
-                                Slet
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `;
-
-        }).join("");
-
-    }
-
-    /* Dashboard recent projects */
-
-    const latest = [...projects].slice(-5).reverse();
-
-    if (latest.length === 0) {
-
-        dashboard.innerHTML = `
-            <tr>
-                <td colspan="3" class="empty">
-                    Opret dit første projekt.
-                </td>
-            </tr>
-        `;
-
-    } else {
-
-        dashboard.innerHTML = latest.map(project => {
-
-            let statusClass = "";
-
-            if (project.status === "Afsluttet") {
-                statusClass = "completed";
-            }
-
-            if (project.status === "Planlagt") {
-                statusClass = "planned";
-            }
-
-            return `
-                <tr>
-                    <td><strong>${escapeHTML(project.name)}</strong></td>
-                    <td>${escapeHTML(project.location || "-")}</td>
-                    <td>
-                        <span class="status ${statusClass}">
-                            ${escapeHTML(project.status)}
-                        </span>
-                    </td>
-                </tr>
-            `;
-
-        }).join("");
-
-    }
-
-    updateDashboard();
-
+  document.getElementById("projectsList").innerHTML = `
+  <table>
+  <tr>
+  <th>Projekt</th>
+  <th>Kunde</th>
+  <th>Skrot</th>
+  <th>Udgifter</th>
+  <th>Resultat</th>
+  <th></th>
+  </tr>
+  ${projects.map(p => `
+  <tr>
+  <td>${p.name}</td>
+  <td>${p.customer || "-"}</td>
+  <td>${money(projectScrap(p.id))}</td>
+  <td>${money(projectWaste(p.id) + projectExpenses(p.id))}</td>
+  <td class="green">${money(projectScrap(p.id)-projectWaste(p.id)-projectExpenses(p.id))}</td>
+  <td><button class="delete" onclick="deleteItem('project',${p.id})">Slet</button></td>
+  </tr>
+  `).join("")}
+  </table>`;
 }
 
-/* Dashboard update */
-function updateDashboard() {
+function renderScrap() {
+  if(!scraps.length) {
+    document.getElementById("scrapList").innerHTML =
+      '<p class="empty">Ingen skrotregistreringer endnu.</p>';
+    return;
+  }
 
-    const active = projects.filter(
-        project => project.status === "Aktiv"
-    ).length;
-
-    document.getElementById("activeProjects").textContent = active;
-
-    /* Placeholder until scrap and waste modules are connected */
-    document.getElementById("scrapIncome").textContent = "0 kr.";
-    document.getElementById("wasteCosts").textContent = "0 kr.";
-    document.getElementById("netResult").textContent = "0 kr.";
-
+  document.getElementById("scrapList").innerHTML = `
+  <table>
+  <tr><th>Projekt</th><th>Materiale</th><th>Kg</th><th>Pris/kg</th><th>Total</th><th></th></tr>
+  ${scraps.map(s => `
+  <tr>
+  <td>${projectName(s.projectId)}</td>
+  <td>${s.material}</td>
+  <td>${s.kg.toLocaleString("da-DK")}</td>
+  <td>${money(s.price)}</td>
+  <td>${money(s.total)}</td>
+  <td><button class="delete" onclick="deleteItem('scrap',${s.id})">Slet</button></td>
+  </tr>`).join("")}
+  </table>`;
 }
 
-/* Open create modal */
-function openProjectModal() {
+function renderWaste() {
+  if(!wastes.length) {
+    document.getElementById("wasteList").innerHTML =
+      '<p class="empty">Ingen affaldsregistreringer endnu.</p>';
+    return;
+  }
 
-    document.getElementById("projectForm").reset();
-    document.getElementById("projectId").value = "";
-    document.getElementById("modalTitle").textContent = "Opret projekt";
-
-    document.getElementById("projectModal").classList.add("show");
-
+  document.getElementById("wasteList").innerHTML = `
+  <table>
+  <tr><th>Projekt</th><th>Type</th><th>Kg</th><th>Pris/kg</th><th>Total</th><th></th></tr>
+  ${wastes.map(w => `
+  <tr>
+  <td>${projectName(w.projectId)}</td>
+  <td>${w.type}</td>
+  <td>${w.kg.toLocaleString("da-DK")}</td>
+  <td>${money(w.price)}</td>
+  <td>${money(w.total)}</td>
+  <td><button class="delete" onclick="deleteItem('waste',${w.id})">Slet</button></td>
+  </tr>`).join("")}
+  </table>`;
 }
 
-/* Close modal */
-function closeProjectModal() {
+function renderExpenses() {
+  if(!expenses.length) {
+    document.getElementById("expenseList").innerHTML =
+      '<p class="empty">Ingen udgifter endnu.</p>';
+    return;
+  }
 
-    document.getElementById("projectModal").classList.remove("show");
-
+  document.getElementById("expenseList").innerHTML = `
+  <table>
+  <tr><th>Projekt</th><th>Kategori</th><th>Beskrivelse</th><th>Beløb</th><th></th></tr>
+  ${expenses.map(e => `
+  <tr>
+  <td>${projectName(e.projectId)}</td>
+  <td>${e.category}</td>
+  <td>${e.description || "-"}</td>
+  <td>${money(e.amount)}</td>
+  <td><button class="delete" onclick="deleteItem('expense',${e.id})">Slet</button></td>
+  </tr>`).join("")}
+  </table>`;
 }
 
-/* Edit project */
-function editProject(id) {
+function renderDashboard() {
+  const totalScrap = scraps.reduce((sum,s) => sum + s.total,0);
+  const totalKg = scraps.reduce((sum,s) => sum + s.kg,0);
+  const totalExpenses =
+    wastes.reduce((sum,w) => sum + w.total,0) +
+    expenses.reduce((sum,e) => sum + e.amount,0);
 
-    const project = projects.find(
-        project => project.id === id
-    );
+  document.getElementById("dashProjects").textContent = projects.length;
+  document.getElementById("dashScrap").textContent = money(totalScrap);
+  document.getElementById("dashKg").textContent = totalKg.toLocaleString("da-DK") + " kg";
+  document.getElementById("dashExpenses").textContent = money(totalExpenses);
+  document.getElementById("dashResult").textContent = money(totalScrap-totalExpenses);
 
-    if (!project) return;
+  if(!projects.length) {
+    document.getElementById("recentProjects").innerHTML =
+      '<p class="empty">Opret dit første projekt for at komme i gang.</p>';
+    return;
+  }
 
-    document.getElementById("projectId").value = project.id;
-    document.getElementById("projectName").value = project.name;
-    document.getElementById("projectLocation").value = project.location;
-    document.getElementById("projectStatus").value = project.status;
-
-    document.getElementById("modalTitle").textContent = "Rediger projekt";
-
-    document.getElementById("projectModal").classList.add("show");
-
+  document.getElementById("recentProjects").innerHTML = `
+  <table>
+  <tr><th>Projekt</th><th>Skrotindtægt</th><th>Udgifter</th><th>Resultat</th></tr>
+  ${projects.slice(-5).reverse().map(p => `
+  <tr>
+  <td>${p.name}</td>
+  <td class="green">${money(projectScrap(p.id))}</td>
+  <td>${money(projectWaste(p.id)+projectExpenses(p.id))}</td>
+  <td>${money(projectScrap(p.id)-projectWaste(p.id)-projectExpenses(p.id))}</td>
+  </tr>`).join("")}
+  </table>`;
 }
 
-/* Delete project */
-function deleteProject(id) {
-
-    const project = projects.find(
-        project => project.id === id
-    );
-
-    if (!project) return;
-
-    const confirmDelete = confirm(
-        "Er du sikker på, at du vil slette projektet '" +
-        project.name +
-        "'?"
-    );
-
-    if (!confirmDelete) return;
-
-    projects = projects.filter(
-        project => project.id !== id
-    );
-
-    saveProjects();
-    renderProjects();
-
+function renderReports() {
+  document.getElementById("reportList").innerHTML = `
+  <table>
+  <tr><th>Projekt</th><th>Skrotindtægt</th><th>Affald</th><th>Andre udgifter</th><th>Resultat</th></tr>
+  ${projects.map(p => `
+  <tr>
+  <td>${p.name}</td>
+  <td>${money(projectScrap(p.id))}</td>
+  <td>${money(projectWaste(p.id))}</td>
+  <td>${money(projectExpenses(p.id))}</td>
+  <td>${money(projectScrap(p.id)-projectWaste(p.id)-projectExpenses(p.id))}</td>
+  </tr>`).join("")}
+  </table>`;
 }
 
-/* Save project form */
-document.getElementById("projectForm").addEventListener(
-    "submit",
-    function(event) {
+function exportCSV() {
+  let rows = [["Projekt","Skrotindtægt","Affald","Andre udgifter","Resultat"]];
 
-        event.preventDefault();
+  projects.forEach(p => {
+    rows.push([
+      p.name,
+      projectScrap(p.id),
+      projectWaste(p.id),
+      projectExpenses(p.id),
+      projectScrap(p.id)-projectWaste(p.id)-projectExpenses(p.id)
+    ]);
+  });
 
-        const id = document.getElementById("projectId").value;
+  const csv = rows.map(row =>
+    row.map(value => `"${String(value).replace(/"/g,'""')}"`).join(";")
+  ).join("\n");
 
-        const name = document.getElementById("projectName").value.trim();
-
-        const location = document.getElementById("projectLocation").value.trim();
-
-        const status = document.getElementById("projectStatus").value;
-
-        if (!name) {
-            alert("Indtast venligst et projektnavn.");
-            return;
-        }
-
-        if (id) {
-
-            const existing = projects.find(
-                project => project.id === id
-            );
-
-            if (existing) {
-
-                existing.name = name;
-                existing.location = location;
-                existing.status = status;
-
-            }
-
-        } else {
-
-            const newProject = {
-
-                id: crypto.randomUUID(),
-
-                name: name,
-
-                location: location,
-
-                status: status,
-
-                createdAt: new Date().toISOString()
-
-            };
-
-            projects.push(newProject);
-
-        }
-
-        saveProjects();
-        renderProjects();
-        closeProjectModal();
-
-    }
-);
-
-/* Navigation */
-function showView(viewId, navElement) {
-
-    document.querySelectorAll(".view").forEach(view => {
-
-        view.classList.remove("active");
-
-    });
-
-    document.getElementById(viewId).classList.add("active");
-
-    document.querySelectorAll(".nav-item").forEach(item => {
-
-        item.classList.remove("active");
-
-    });
-
-    if (navElement) {
-        navElement.classList.add("active");
-    } else {
-
-        document.querySelectorAll(".nav-item").forEach(item => {
-
-            if (item.getAttribute("onclick").includes(viewId)) {
-                item.classList.add("active");
-            }
-
-        });
-
-    }
-
+  const blob = new Blob(["\ufeff"+csv], {type:"text/csv;charset=utf-8"});
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "SCRAPLOG_rapport.csv";
+  link.click();
 }
 
-/* Click outside modal */
-document.getElementById("projectModal").addEventListener(
-    "click",
-    function(event) {
+function renderAll() {
+  renderProjects();
+  renderScrap();
+  renderWaste();
+  renderExpenses();
+  renderDashboard();
+  renderReports();
+}
 
-        if (event.target === this) {
-            closeProjectModal();
-        }
-
-    }
-);
-
-/* Initial render */
-renderProjects();
+renderAll();
 
 </script>
 
